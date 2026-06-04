@@ -1,0 +1,7 @@
+name: BossPlugin
+version: '1.0-SNAPSHOT'
+main: Slippy.bossPlugin.BossPlugin
+api-version: '1.21'
+authors: [ Me! ]
+description: Polnareffland Plugin
+website: not really...
