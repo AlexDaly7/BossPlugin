@@ -2,6 +2,8 @@ package Slippy.bossPlugin.bosses;
 
 import java.util.ArrayList;
 
+import Slippy.bossPlugin.BossPlugin;
+import Slippy.bossPlugin.abilities.Ability;
 import org.bukkit.Location;
 import org.bukkit.entity.Mob;
 import org.bukkit.World;
@@ -16,9 +18,12 @@ public class BaseBoss {
     protected int damage;
     protected String name;
     protected int baseCooldown;
-    protected int specialCooldown;
+    protected int maxBaseCooldown = 10;
+    protected int specialCooldown = 20;
+    protected int maxSpecialCooldown;
 
-    protected ArrayList abilities = new ArrayList();
+    protected ArrayList<Ability> baseAbilities = new ArrayList();
+    protected ArrayList<Ability> specialAbilities = new ArrayList();
 
     public BaseBoss(World world, Location loc) {
         this.world = world;
@@ -32,7 +37,26 @@ public class BaseBoss {
     }
 
     public void tickAbilities() {
-        
+
+        if(!specialAbilities.isEmpty()&&maxSpecialCooldown!=0) {
+            BossPlugin.getPlugin().getLogger().info(specialCooldown+" special cooldown left...");
+            specialCooldown--;
+            if(specialCooldown<=0) {
+                specialCooldown = maxSpecialCooldown;
+                specialAbilities.get((int)(Math.random()*specialAbilities.size())).activate(mob);
+                return;
+            }
+        }
+        // Special ability should run over base ability and so skips a tick for base cooldown if called.
+        // This gives the player an extra second before a base ability after a special ability, which is beneficial.
+        if(!baseAbilities.isEmpty()&&maxBaseCooldown!=0) {
+            BossPlugin.getPlugin().getLogger().info(baseCooldown+" cooldown left...");
+            baseCooldown--;
+            if (baseCooldown<=0) {
+                baseCooldown = maxBaseCooldown;
+                baseAbilities.get((int)(Math.random()*baseAbilities.size())).activate(mob);
+            }
+        }
     }
 
     public void tick() {
