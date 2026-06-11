@@ -16,14 +16,8 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
 
-public class HugeBoss extends CustomBoss {
-
-    protected World world;
-    protected Mob mob;
-    protected Location loc;
-    protected int maxHealth;
-    protected int damage;
-    protected BossBar bossBar;
+public class HugeBoss extends BaseBoss {
+    // Boss with different objectives to complete (ie, pylons to destroy before boss can be attacked)
 
     public HugeBoss(World world, Location loc) {
         this.world = world;

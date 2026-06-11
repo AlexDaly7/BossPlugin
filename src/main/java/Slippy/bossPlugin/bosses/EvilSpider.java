@@ -14,7 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 
-public class EvilSpider extends CustomBoss {
+public class EvilSpider extends BaseBoss {
     public EvilSpider(World world, Location loc) {
         this.world = world;
         this.loc = loc;
