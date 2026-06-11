@@ -39,7 +39,6 @@ public class BaseBoss {
     public void tickAbilities() {
 
         if(!specialAbilities.isEmpty()&&maxSpecialCooldown!=0) {
-            BossPlugin.getPlugin().getLogger().info(specialCooldown+" special cooldown left...");
             specialCooldown--;
             if(specialCooldown<=0) {
                 specialCooldown = maxSpecialCooldown;
@@ -50,11 +49,11 @@ public class BaseBoss {
         // Special ability should run over base ability and so skips a tick for base cooldown if called.
         // This gives the player an extra second before a base ability after a special ability, which is beneficial.
         if(!baseAbilities.isEmpty()&&maxBaseCooldown!=0) {
-            BossPlugin.getPlugin().getLogger().info(baseCooldown+" cooldown left...");
             baseCooldown--;
             if (baseCooldown<=0) {
                 baseCooldown = maxBaseCooldown;
                 baseAbilities.get((int)(Math.random()*baseAbilities.size())).activate(mob);
+
             }
         }
     }

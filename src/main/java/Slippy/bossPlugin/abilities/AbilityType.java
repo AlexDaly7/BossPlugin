@@ -1,7 +1,5 @@
 package Slippy.bossPlugin.abilities;
 
-import Slippy.bossPlugin.abilities.*;
-
 public enum AbilityType {
     SUMMON_SPIDERS {
         @Override
@@ -19,6 +17,12 @@ public enum AbilityType {
         @Override
         public Ability create(int range) {
             return new Explosion(range);
+        }
+    },
+    BLIND_NEARBY {
+        @Override
+        public Ability create(int range) {
+            return new BlindNearby(range);
         }
     };
 

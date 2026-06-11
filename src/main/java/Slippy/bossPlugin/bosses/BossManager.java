@@ -16,7 +16,6 @@ public class BossManager {
         task[0] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             for(BaseBoss boss : bosses) {
                 boss.tick();
-                plugin.getLogger().info("Boss: "+boss.mob.getName());
             }
         }, 0L, 20L);
     }

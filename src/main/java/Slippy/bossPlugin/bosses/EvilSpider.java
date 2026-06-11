@@ -16,15 +16,15 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class EvilSpider extends BaseBoss {
     public EvilSpider(World world, Location loc) {
-        maxBaseCooldown = 10;
-        baseAbilities.add(AbilityType.EVOKER_FANG_STRIKE.create(100));
+        maxBaseCooldown = 3;
+        baseAbilities.add(AbilityType.BLIND_NEARBY.create(100));
         this.world = world;
         this.loc = loc;
         mob = (Spider) world.spawnEntity(loc, EntityType.SPIDER);
-        mob.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(2);
+        mob.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(3.5);
+        mob.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.3);
         mob.setCustomName("Big Evil Spider");
         mob.setCustomNameVisible(true);
-        mob.setAI(false);
     }
 
     //@Override
