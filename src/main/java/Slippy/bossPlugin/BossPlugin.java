@@ -1,17 +1,33 @@
 package Slippy.bossPlugin;
 
+import Slippy.bossPlugin.bosses.BossManager;
+import Slippy.bossPlugin.bosses.EvilSpider;
+import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+
+
 public final class BossPlugin extends JavaPlugin {
+    static JavaPlugin plugin;
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
+        plugin = this;
+        World world = Bukkit.getWorld("world");
 
+        EvilSpider spider = new EvilSpider(world, new Location(world, 359, 67, 181));
+        BossManager.add(spider);
+        BossManager.start();
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+
+    }
+
+    public static JavaPlugin getPlugin() {
+        return plugin;
     }
 }
