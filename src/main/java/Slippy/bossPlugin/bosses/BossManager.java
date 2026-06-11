@@ -10,11 +10,11 @@ import java.util.ArrayList;
 public class BossManager {
     static BukkitTask[] task = new BukkitTask[1];
     static JavaPlugin plugin = BossPlugin.getPlugin();
-    static ArrayList<CustomBoss> bosses = new ArrayList<>();
+    static ArrayList<BaseBoss> bosses = new ArrayList<>();
 
     public static void start() {
         task[0] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            for(CustomBoss boss : bosses) {
+            for(BaseBoss boss : bosses) {
                 boss.tick();
                 plugin.getLogger().info("Boss: "+boss.getName());
             }
@@ -26,7 +26,7 @@ public class BossManager {
     }
 
 
-    public static void add(CustomBoss boss) {
+    public static void add(BaseBoss boss) {
         bosses.add(boss);
     }
 }

@@ -15,6 +15,8 @@ public class BaseBoss {
     protected int maxHealth;
     protected int damage;
     protected String name;
+    protected int baseCooldown;
+    protected int specialCooldown;
 
     protected ArrayList abilities = new ArrayList();
 

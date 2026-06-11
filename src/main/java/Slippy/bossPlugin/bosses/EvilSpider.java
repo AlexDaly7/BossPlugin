@@ -27,7 +27,12 @@ public class EvilSpider extends BaseBoss {
 
     @Override
     public void tickAbilities() {
-        AbilityType.EXPLOSION.activate(mob, 100);
+        baseCooldown--;
+        specialCooldown--;
+
+        if(specialCooldown==0) {
+            
+        }
     }
 
     //@Override
