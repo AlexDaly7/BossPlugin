@@ -21,11 +21,11 @@ public class HugeBoss extends BaseBoss {
 
     public HugeBoss(World world, Location loc) {
         this.world = world;
-        this.loc = loc;
+        this.spawnLoc = loc;
     }
     @Override
     public void spawnBoss() {
-        mob = (Spider) world.spawnEntity(loc, EntityType.SPIDER);
+        mob = (Spider) world.spawnEntity(spawnLoc, EntityType.SPIDER);
         mob.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(2);
         mob.setCustomName("Big Huge Boss");
         mob.setCustomNameVisible(true);

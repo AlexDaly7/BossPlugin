@@ -8,7 +8,7 @@ public class CustomBoss extends BaseBoss {
 
     public CustomBoss(World world, Location loc, Mob mob) {
         this.world = world;
-        this.loc = loc;
+        this.spawnLoc = loc;
         this.mob = mob;
     }
 }

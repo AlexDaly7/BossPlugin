@@ -1,25 +1,19 @@
 package Slippy.bossPlugin.bosses;
 
-import Slippy.bossPlugin.BossPlugin;
 import Slippy.bossPlugin.abilities.AbilityType;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Mob;
 import org.bukkit.entity.Spider;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
-
 
 public class EvilSpider extends BaseBoss {
     public EvilSpider(World world, Location loc) {
         maxBaseCooldown = 3;
         baseAbilities.add(AbilityType.BLIND_NEARBY.create(100));
+        baseAbilities.add(AbilityType.EVOKER_FANG_STRIKE.create(100));
+        baseAbilities.add(AbilityType.EXPLOSION.create(100));
         this.world = world;
-        this.loc = loc;
         mob = (Spider) world.spawnEntity(loc, EntityType.SPIDER);
         mob.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(3.5);
         mob.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.3);
