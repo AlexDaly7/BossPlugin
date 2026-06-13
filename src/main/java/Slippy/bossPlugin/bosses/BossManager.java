@@ -23,11 +23,15 @@ public class BossManager {
         // Task that ticks boss bar, removes bosses from arraylist once dead etc...
         // Runs 4 times a second.
         task[1] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            bosses.removeIf(boss -> boss.isBossDead());
             for(BaseBoss boss : bosses) {
-                boss.tickBossBar();
+                if(boss.isBossDead()) {
+                    boss.removeBossBar();
+                } else {
+                    boss.tickBossBar();
+                }
                 //plugin.getLogger().info(boss.mob.getName()+": ticks boss bar");
             }
+            bosses.removeIf(BaseBoss::isBossDead);
         }, 0L, 5L);
     }
 

@@ -18,7 +18,7 @@ public final class BossPlugin extends JavaPlugin {
         plugin = this;
         World world = Bukkit.getWorld("world");
 
-        BaseBoss spider = new EvilSpider(world, new Location(world, 359, 67, 181));
+        BaseBoss spider = new EvilSpider(world, new Location(world, 200, 83, 200));
         BossManager.add(spider);
         BossManager.start();
     }

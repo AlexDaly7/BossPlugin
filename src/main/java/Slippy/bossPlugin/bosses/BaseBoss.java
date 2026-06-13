@@ -78,11 +78,9 @@ public class BaseBoss {
         ArrayList<Player> players = new ArrayList<Player>(mob.getLocation().getNearbyPlayers(100));
         if(!players.isEmpty()) {
             // Add nearby players so they can see the boss bar
-
             for(Player player : players) {
                 if(!bossBar.getPlayers().contains(player)) {
                     bossBar.addPlayer(player);
-                    BossPlugin.getPlugin().getLogger().info(player.getName()+" added to boss bar.");
                 }
             }
         }
@@ -97,6 +95,10 @@ public class BaseBoss {
             double percentage = mob.getHealth() / mob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
             bossBar.setProgress(percentage);
         }
+    }
+
+    public void removeBossBar() {
+        bossBar.removeAll();
     }
 
     public boolean isBossDead() {
