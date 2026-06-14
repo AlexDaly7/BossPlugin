@@ -17,7 +17,7 @@ public class Explosion extends Ability {
         Location loc = mob.getLocation();
 
         // Get players within radius
-        ArrayList<Player> players = new ArrayList<Player>(loc.getNearbyPlayers(20));
+        ArrayList<Player> players = new ArrayList<Player>(loc.getNearbyPlayers(range));
         if(players.getFirst()!=null) {
             World world = mob.getWorld();
             JavaPlugin plugin = BossPlugin.getPlugin();

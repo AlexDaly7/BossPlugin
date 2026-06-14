@@ -25,7 +25,6 @@ public class EvokerFangStrike extends Ability {
 
         ArrayList<Player> players = new ArrayList<Player>(loc.getNearbyPlayers(range));
         if(players.getFirst()!=null) {
-            JavaPlugin plugin = BossPlugin.getPlugin();
             World world = mob.getWorld();
             Location playerLoc = players.getFirst().getLocation();
 

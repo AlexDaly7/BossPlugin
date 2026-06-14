@@ -36,8 +36,12 @@ public class BossManager {
     }
 
     public static void stop() {
-        task[0].cancel();
-        task[1].cancel();
+        for(BukkitTask task : task) {
+            if(task!=null) {
+                task.cancel();
+            }
+        }
+
     }
 
 
