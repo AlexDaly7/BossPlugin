@@ -10,9 +10,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
-import java.io.ObjectInputFilter;
-
-
 public final class BossPlugin extends JavaPlugin {
     static JavaPlugin plugin;
 

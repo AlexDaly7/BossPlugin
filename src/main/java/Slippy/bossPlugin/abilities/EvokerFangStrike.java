@@ -23,8 +23,9 @@ public class EvokerFangStrike extends Ability {
     public void activate(Mob mob) {
         Location loc = mob.getLocation();
 
-        ArrayList<Player> players = new ArrayList<Player>(loc.getNearbyPlayers(range));
-        if(players.getFirst()!=null) {
+
+        if(!loc.getNearbyPlayers(range).isEmpty()) {
+            ArrayList<Player> players = new ArrayList<Player>(loc.getNearbyPlayers(range));
             World world = mob.getWorld();
             Location playerLoc = players.getFirst().getLocation();
 
