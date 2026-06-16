@@ -1,3 +1,8 @@
 bosses:
-  - name: "evilBoss..."
-  - name: "good boss.."
+ - name: "evilBoss..."
+   mob: "SPIDER"
+   attributes:
+     - generic-scale: 2
+     - generic-movement-speed: 0.4
+ - name: "good boss.."
+

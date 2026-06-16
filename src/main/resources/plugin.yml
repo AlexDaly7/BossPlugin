@@ -1,7 +1,7 @@
 name: BossPlugin
-version: '1.0-SNAPSHOT'
+version: 'DEV'
 main: Slippy.bossPlugin.BossPlugin
 api-version: '1.21'
-authors: [ Me! ]
-description: Polnareffland Plugin
+authors: [ Alex ]
+description: Custom YML configured bosses for paper 1.21.1 servers.
 website: not really...

@@ -17,11 +17,11 @@ public final class BossPlugin extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         ConfigUtil.createConfig();
-        ConfigUtil.loadBosses();
         World world = Bukkit.getWorld("world");
 
-        BaseBoss spider = new EvilSpider(world, new Location(world, 200, 83, 200));
-        BossManager.add(spider);
+        //BaseBoss spider = new EvilSpider(world, new Location(world, 200, 83, 200));
+        //BossManager.add(spider);
+        BossManager.loadBosses(ConfigUtil.getBosses());
         BossManager.start();
 
     }

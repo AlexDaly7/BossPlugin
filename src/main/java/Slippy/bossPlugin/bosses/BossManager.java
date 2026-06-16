@@ -12,8 +12,15 @@ public class BossManager {
     static JavaPlugin plugin = BossPlugin.getPlugin();
     static ArrayList<BaseBoss> bosses = new ArrayList<>();
 
+    public static void loadBosses(ArrayList<BaseBoss> loadedBosses) {
+        bosses = loadedBosses;
+    }
+
     public static void start() {
         // Task that ticks abilities, runs every second
+        for(BaseBoss boss : bosses) {
+            boss.spawnBoss();
+        }
         task[0] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             for(BaseBoss boss : bosses) {
                 boss.tickAbilities();
