@@ -15,7 +15,9 @@ import org.bukkit.entity.Mob;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +42,10 @@ public class ConfigUtil {
         if(bossList!=null) {
             plugin.getLogger().info("Bosses detected");
             for(Object bossEntry : bossList) {
+                // Convert boss config data to map
                 Map<String, Object> bossData = (Map<String, Object>) bossEntry;
+
+                // Values are read from config and filled with placeholders if not found
                 String name = bossData.containsKey("name") ? (String) bossData.get("name") : "Unnamed Boss";
                 String worldString = bossData.containsKey("world") ? (String) bossData.get("world") : "world";
                 Map<String, Object> spawnLoc = (Map<String, Object>) bossData.get("spawnLocation");
@@ -48,11 +53,30 @@ public class ConfigUtil {
                 double spawnY = spawnLoc.containsKey("y") ? (double) spawnLoc.get("y") : 80;
                 double spawnZ = spawnLoc.containsKey("z") ? (double) spawnLoc.get("z") : 0;
                 String mob = bossData.containsKey("mob") ? (String) bossData.get("mob") : "ZOMBIE";
+
+                // Load and check attributes
+                ArrayList<LinkedHashMap> attributesData;
+                if(bossData.containsKey("attributes")) {
+                    attributesData = (ArrayList<LinkedHashMap>) bossData.get("attributes");
+                    attributesData.forEach(entry -> {
+                        if(!entry.containsKey("attribute")||!entry.containsKey("value")) {
+                            attributesData.remove(entry);
+                        }
+                    });
+                } else {
+                    attributesData = new ArrayList<LinkedHashMap>();
+                }
+
+                // Values are applied to create boss
                 World world = Bukkit.getWorld(worldString);
                 if(world!=null) {
-                    BaseBoss boss = new CustomBoss(world, new Location(world, spawnX, spawnY, spawnZ), EntityType.valueOf(mob));
-                    boss.setName(name);
+                    CustomBoss boss = new CustomBoss(world, new Location(world, spawnX, spawnY, spawnZ), EntityType.valueOf(mob));
 
+                    // Boss object is given values to apply to itself upon spawning
+                    boss.setName(name);
+                    if(!attributesData.isEmpty()) {
+                        boss.setAttributes(attributesData);
+                    }
                     bosses.add(boss);
 
                 } else {
