@@ -1,6 +1,7 @@
 package Slippy.bossPlugin.bosses;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import Slippy.bossPlugin.BossPlugin;
 import Slippy.bossPlugin.abilities.Ability;
@@ -31,8 +32,9 @@ public class BaseBoss {
     protected int specialCooldown = 20;
 
     // Phase variables
+    protected List<Phase> phases = new ArrayList<Phase>();
     protected Phase activePhase;
-    protected ArrayList<Phase> phases = new ArrayList<Phase>();
+    protected Phase startingPhase;
 
     // Boss bar
     protected BossBar bossBar = Bukkit.createBossBar("CRAZY EVIL SPIDER", BarColor.BLUE, BarStyle.SEGMENTED_6);
@@ -48,15 +50,14 @@ public class BaseBoss {
 
     public void tickAbilities() {
         // Ensure abilities don't work if mob is not spawned or is dead.
-        if(mob==null) return;
-        if(mob.isDead()) return;
+        if(mob==null||mob.isDead()) return;
+        if(activePhase==null) return;
 
         if(!activePhase.getSpecialAbilities().isEmpty()&&activePhase.getMaxSpecialCooldown()!=0) {
             specialCooldown--;
             if(specialCooldown<=0) {
-                ArrayList<Ability> specialAbilities = activePhase.getSpecialAbilities();
                 specialCooldown = activePhase.getMaxSpecialCooldown();
-                specialAbilities.get((int)(Math.random()*specialAbilities.size())).activate(mob);
+                activePhase.getRanSpecialAbility().activate(mob);
                 return;
             }
         }
@@ -65,25 +66,39 @@ public class BaseBoss {
         if(!activePhase.getBaseAbilities().isEmpty()&&activePhase.getMaxBaseCooldown()!=0) {
             baseCooldown--;
             if (baseCooldown<=0) {
-                ArrayList<Ability> baseAbilities = activePhase.getBaseAbilities();
                 baseCooldown = activePhase.getMaxBaseCooldown();
-                baseAbilities.get((int)(Math.random()*baseAbilities.size())).activate(mob);
+                activePhase.getRanBaseAbility().activate(mob);
             }
         }
     }
 
     public void tickPhase() {
         if(!phases.isEmpty()) {
-            Phase currentPhase = phases.getFirst();
-            double currentHealth = mob.getHealth() / maxHealth;
-            for(Phase phase : phases) {
-                if(currentPhase.getMaxHealthRange()>phase.getMaxHealthRange()&&phase.getMaxHealthRange()>=currentHealth) {
-                    currentPhase = phase;
+            BossPlugin.getPlugin().getLogger().info("Phases not empty");
+            if(mob.getHealth()!=maxHealth) {
+                Phase currentPhase = phases.getFirst();
+                double currentHealth = mob.getHealth() / maxHealth;
+                for (Phase phase : phases) {
+                    if (currentPhase.getMaxHealthRange() > phase.getMaxHealthRange() && phase.getMaxHealthRange() >= currentHealth) {
+                        currentPhase = phase;
+                    }
                 }
+                if (activePhase != currentPhase) {
+                    activePhase = currentPhase;
+                }
+            } else {
+                if(startingPhase==null) {
+                    for(Phase phase : phases) {
+                        if(phase.getMaxHealthRange()==1) {
+                            startingPhase = phase;
+                            activePhase = phase;
+                        }
+                    }
+                }
+
             }
-            if(activePhase!=currentPhase) {
-                activePhase = currentPhase;
-            }
+        } else {
+            BossPlugin.getPlugin().getLogger().info("Phases empty");
         }
     }
 
@@ -120,5 +135,13 @@ public class BaseBoss {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setHealth(int health) {
+        maxHealth = health;
+    }
+
+    public void setPhases(List<Phase> phases) {
+        this.phases = phases;
     }
 }

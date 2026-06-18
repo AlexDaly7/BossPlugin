@@ -23,7 +23,7 @@ public class BossManager {
         }
         task[0] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             for(BaseBoss boss : bosses) {
-                //boss.tickAbilities();
+                boss.tickAbilities();
             }
         }, 0L, 20L);
 

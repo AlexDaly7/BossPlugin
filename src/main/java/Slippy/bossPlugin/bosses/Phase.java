@@ -3,12 +3,13 @@ package Slippy.bossPlugin.bosses;
 import Slippy.bossPlugin.abilities.Ability;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Phase {
 
     private double maxHealthRange;
-    private ArrayList<Ability> baseAbilities = new ArrayList<Ability>();
-    private ArrayList<Ability> specialAbilities = new ArrayList<Ability>();
+    private List<Ability> baseAbilities = new ArrayList<Ability>();
+    private List<Ability> specialAbilities = new ArrayList<Ability>();
     private int maxBaseCooldown;
     private int maxSpecialCooldown;
 
@@ -20,16 +21,38 @@ public class Phase {
         this.maxSpecialCooldown = maxSpecialCooldown;
     }
 
+    public Phase(double maxHealthRange, int maxBaseCooldown, int maxSpecialCooldown) {
+        this.maxHealthRange = maxHealthRange;
+        this.maxBaseCooldown = maxBaseCooldown;
+        this.maxSpecialCooldown = maxSpecialCooldown;
+    }
+
     public double getMaxHealthRange() {
         return maxHealthRange;
     }
 
-    public ArrayList<Ability> getBaseAbilities() {
+    public List<Ability> getBaseAbilities() {
         return baseAbilities;
     }
 
-    public ArrayList<Ability> getSpecialAbilities() {
+    public List<Ability> getSpecialAbilities() {
         return specialAbilities;
+    }
+
+    public void setBaseAbilities(List<Ability> baseAbilities) {
+        this.baseAbilities = baseAbilities;
+    }
+
+    public void setSpecialAbilities(List<Ability> specialAbilities) {
+        this.specialAbilities = specialAbilities;
+    }
+
+    public Ability getRanSpecialAbility() {
+        return specialAbilities.get((int)(Math.random()*specialAbilities.size()));
+    }
+
+    public Ability getRanBaseAbility() {
+        return baseAbilities.get((int)(Math.random()*baseAbilities.size()));
     }
 
     public int getMaxSpecialCooldown() {

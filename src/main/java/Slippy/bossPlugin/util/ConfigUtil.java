@@ -1,23 +1,22 @@
 package Slippy.bossPlugin.util;
 
 import Slippy.bossPlugin.BossPlugin;
+import Slippy.bossPlugin.abilities.Ability;
+import Slippy.bossPlugin.abilities.AbilityType;
 import Slippy.bossPlugin.bosses.BaseBoss;
 import Slippy.bossPlugin.bosses.CustomBoss;
+import Slippy.bossPlugin.bosses.Phase;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Mob;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +36,8 @@ public class ConfigUtil {
     }
 
     public static ArrayList<BaseBoss> getBosses() {
+        // TODO: proper feedback using Bukkit.broadcastMessage() to inform user of yml mistakes
+
         ArrayList<BaseBoss> bosses = new ArrayList<BaseBoss>();
         List bossList = fileConfig.getList("bosses");
         if(bossList!=null) {
@@ -53,18 +54,30 @@ public class ConfigUtil {
                 double spawnY = spawnLoc.containsKey("y") ? (double) spawnLoc.get("y") : 80;
                 double spawnZ = spawnLoc.containsKey("z") ? (double) spawnLoc.get("z") : 0;
                 String mob = bossData.containsKey("mob") ? (String) bossData.get("mob") : "ZOMBIE";
+                int health = bossData.containsKey("health") ? (int) bossData.get("health") : 100;
 
-                // Load and check attributes
-                ArrayList<LinkedHashMap> attributesData;
+                // Load and parse attributes
+                List<Map<String, Object>> parsedAttributes = new ArrayList<>();
                 if(bossData.containsKey("attributes")) {
-                    attributesData = (ArrayList<LinkedHashMap>) bossData.get("attributes");
-                    attributesData.forEach(entry -> {
-                        if(!entry.containsKey("attribute")||!entry.containsKey("value")) {
-                            attributesData.remove(entry);
+                    for(Object attribute : (List) bossData.get("attributes")) {
+                        Map<String, Object> parsed = parseAttribute((Map<String, Object>) attribute);
+                        if(parsed!=null) {
+                            parsedAttributes.add(parsed);
                         }
-                    });
-                } else {
-                    attributesData = new ArrayList<LinkedHashMap>();
+                    }
+                }
+
+                // Load and parse phases
+                List<Phase> phases = new ArrayList<Phase>();
+                List<Map<String, Object>> phasesData = (ArrayList) bossData.get("phases");
+                if(!phasesData.isEmpty()) {
+                    for(Map<String, Object> phase : phasesData) {
+                        Phase parsed = parsePhase(phase);
+                        if(parsed!=null) {
+                            phases.add(parsed);
+
+                        }
+                    }
                 }
 
                 // Values are applied to create boss
@@ -74,8 +87,13 @@ public class ConfigUtil {
 
                     // Boss object is given values to apply to itself upon spawning
                     boss.setName(name);
-                    if(!attributesData.isEmpty()) {
-                        boss.setAttributes(attributesData);
+                    boss.setHealth(health);
+                    if(!phases.isEmpty()) {
+                        boss.setPhases(phases);
+                    }
+
+                    if(!parsedAttributes.isEmpty()) {
+                        boss.setAttributes(parsedAttributes);
                     }
                     bosses.add(boss);
 
@@ -87,8 +105,77 @@ public class ConfigUtil {
         } else {
             plugin.getLogger().info("no bosses");
         }
-
         return bosses;
+    }
 
+    public static Map<String, Object> parseAttribute(Map<String, Object> attributeData) {
+        if(!attributeData.containsKey("attribute")||!attributeData.containsKey("value")) {
+            return null;
+        }
+        try {
+            // Get attribute object from string, catch if invalid.
+            Attribute attribute = Attribute.valueOf(attributeData.get("attribute").toString());
+            return Map.of("attribute", attribute, "value", attributeData.get("value"));
+        } catch(IllegalArgumentException e) {
+            BossPlugin.getPlugin().getLogger().warning("Attribute "+attributeData.get("attribute")+" could not be found.");
+            return null;
+        }
+    }
+
+    public static Phase parsePhase(Map<String, Object> phaseData) {
+        List<Ability> specialAbilities = new ArrayList<Ability>();
+        List<Ability> baseAbilities = new ArrayList<Ability>();
+        Phase phase;
+        if(!phaseData.containsKey("health")||(double)phaseData.get("health")>1) {
+            return null;
+        }
+        if(!phaseData.containsKey("specialAbilities")||!phaseData.containsKey("specialCooldown")) {
+            return null;
+        }
+        if(!phaseData.containsKey("baseAbilities")||!phaseData.containsKey("baseCooldown")) {
+            return null;
+        } else {
+            phase = new Phase((double) phaseData.get("health"), (int) phaseData.get("baseCooldown"), (int) phaseData.get("specialCooldown"));
+            if (phaseData.containsKey("specialAbilities")) {
+                ArrayList<Map<String, Object>> abilities = (ArrayList) phaseData.get("specialAbilities");
+                if (!abilities.isEmpty()) {
+                    for (Map<String, Object> ability : abilities) {
+                        Ability parsed = parseAbility(ability);
+                        if (parsed != null) {
+                            specialAbilities.add(parsed);
+                        }
+                    }
+                    phase.setSpecialAbilities(specialAbilities);
+                }
+            }
+            if (phaseData.containsKey("baseAbilities")) {
+                ArrayList<Map<String, Object>> abilities = (ArrayList) phaseData.get("baseAbilities");
+                if (!abilities.isEmpty()) {
+                    for (Map<String, Object> ability : abilities) {
+                        Ability parsed = parseAbility(ability);
+                        if (parsed != null) {
+                            baseAbilities.add(parsed);
+                        }
+                    }
+                    phase.setBaseAbilities(baseAbilities);
+                }
+            }
+            return phase;
+        }
+    }
+
+    public static Ability parseAbility(Map<String, Object> abilityData) {
+        if(!abilityData.containsKey("ability")) {
+            return null;
+        }
+        int range = abilityData.containsKey("range") ? (int) abilityData.get("range") : 50;
+        AbilityType ability;
+        try {
+            ability = AbilityType.valueOf((String) abilityData.get("ability"));
+            return ability.create(range);
+        } catch(IllegalArgumentException e) {
+            plugin.getLogger().info(abilityData.get("ability")+" is not a valid ability.");
+            return null;
+        }
     }
 }
