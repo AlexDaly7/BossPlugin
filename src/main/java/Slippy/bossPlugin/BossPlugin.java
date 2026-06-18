@@ -28,7 +28,7 @@ public final class BossPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        //BossManager.stop();
+        BossManager.stop();
     }
 
     public static JavaPlugin getPlugin() {

@@ -27,14 +27,13 @@ public class BaseBoss {
     protected String name;
 
     // Ability variables
-    protected int baseCooldown;
-    protected int maxBaseCooldown = 10;
+    protected int baseCooldown = 10;
     protected int specialCooldown = 20;
-    protected int maxSpecialCooldown;
 
-    // Ability lists
-    protected ArrayList<Ability> baseAbilities = new ArrayList();
-    protected ArrayList<Ability> specialAbilities = new ArrayList();
+    // Phase variables
+    protected Phase activePhase;
+    protected ArrayList<Phase> phases = new ArrayList<Phase>();
+
     // Boss bar
     protected BossBar bossBar = Bukkit.createBossBar("CRAZY EVIL SPIDER", BarColor.BLUE, BarStyle.SEGMENTED_6);
 
@@ -45,30 +44,45 @@ public class BaseBoss {
 
     public BaseBoss() {}
 
-    public void spawnBoss() {
-
-    }
+    public void spawnBoss() {}
 
     public void tickAbilities() {
         // Ensure abilities don't work if mob is not spawned or is dead.
         if(mob==null) return;
         if(mob.isDead()) return;
-        if(!specialAbilities.isEmpty()&&maxSpecialCooldown!=0) {
+
+        if(!activePhase.getSpecialAbilities().isEmpty()&&activePhase.getMaxSpecialCooldown()!=0) {
             specialCooldown--;
             if(specialCooldown<=0) {
-                specialCooldown = maxSpecialCooldown;
+                ArrayList<Ability> specialAbilities = activePhase.getSpecialAbilities();
+                specialCooldown = activePhase.getMaxSpecialCooldown();
                 specialAbilities.get((int)(Math.random()*specialAbilities.size())).activate(mob);
                 return;
             }
         }
         // Special ability should run over base ability and so skips a tick for base cooldown if called.
         // This gives the player an extra second before a base ability after a special ability, which is beneficial.
-        if(!baseAbilities.isEmpty()&&maxBaseCooldown!=0) {
+        if(!activePhase.getBaseAbilities().isEmpty()&&activePhase.getMaxBaseCooldown()!=0) {
             baseCooldown--;
             if (baseCooldown<=0) {
-                baseCooldown = maxBaseCooldown;
+                ArrayList<Ability> baseAbilities = activePhase.getBaseAbilities();
+                baseCooldown = activePhase.getMaxBaseCooldown();
                 baseAbilities.get((int)(Math.random()*baseAbilities.size())).activate(mob);
+            }
+        }
+    }
 
+    public void tickPhase() {
+        if(!phases.isEmpty()) {
+            Phase currentPhase = phases.getFirst();
+            double currentHealth = mob.getHealth() / maxHealth;
+            for(Phase phase : phases) {
+                if(currentPhase.getMaxHealthRange()>phase.getMaxHealthRange()&&phase.getMaxHealthRange()>=currentHealth) {
+                    currentPhase = phase;
+                }
+            }
+            if(activePhase!=currentPhase) {
+                activePhase = currentPhase;
             }
         }
     }

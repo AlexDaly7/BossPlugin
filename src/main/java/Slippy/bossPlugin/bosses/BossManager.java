@@ -8,7 +8,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.ArrayList;
 
 public class BossManager {
-    static BukkitTask[] task = new BukkitTask[2];
+    static BukkitTask[] task = new BukkitTask[3];
     static JavaPlugin plugin = BossPlugin.getPlugin();
     static ArrayList<BaseBoss> bosses = new ArrayList<>();
 
@@ -23,13 +23,20 @@ public class BossManager {
         }
         task[0] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             for(BaseBoss boss : bosses) {
-                boss.tickAbilities();
+                //boss.tickAbilities();
             }
         }, 0L, 20L);
 
+        // Task that checks boss health and updates current phase.
+        task[1] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            for(BaseBoss boss : bosses) {
+                boss.tickPhase();
+            }
+        }, 1L, 10L);
+
         // Task that ticks boss bar, removes bosses from arraylist once dead etc...
         // Runs 4 times a second.
-        task[1] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+        task[2] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             for(BaseBoss boss : bosses) {
                 if(boss.isBossDead()) {
                     boss.removeBossBar();

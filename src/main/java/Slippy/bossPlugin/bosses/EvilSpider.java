@@ -9,10 +9,6 @@ import org.bukkit.entity.Spider;
 
 public class EvilSpider extends BaseBoss {
     public EvilSpider(World world, Location loc) {
-        maxBaseCooldown = 3;
-        baseAbilities.add(AbilityType.BLIND_NEARBY.create(100));
-        baseAbilities.add(AbilityType.EVOKER_FANG_STRIKE.create(100));
-        baseAbilities.add(AbilityType.EXPLOSION.create(100));
         this.world = world;
         mob = (Spider) world.spawnEntity(loc, EntityType.SPIDER);
         mob.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(3.5);
