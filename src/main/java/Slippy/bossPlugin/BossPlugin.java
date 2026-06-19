@@ -1,10 +1,7 @@
 package Slippy.bossPlugin;
 
 import Slippy.bossPlugin.bosses.BossManager;
-import Slippy.bossPlugin.bosses.BaseBoss;
-import Slippy.bossPlugin.bosses.EvilSpider;
 import Slippy.bossPlugin.util.ConfigUtil;
-import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import org.bukkit.Bukkit;

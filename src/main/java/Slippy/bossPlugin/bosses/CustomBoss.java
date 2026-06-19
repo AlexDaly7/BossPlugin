@@ -40,7 +40,6 @@ public class CustomBoss extends BaseBoss {
     public void applyAttributes() {
         attributes.forEach(entry -> {
             mob.getAttribute((Attribute) entry.get("attribute")).setBaseValue((double) entry.get("value"));
-
         });
     }
 

@@ -26,6 +26,8 @@ public class BaseBoss {
     protected int maxHealth;
     protected int damage;
     protected String name;
+    protected int maxRespawnTimer = 500;
+    protected int respawnTimer = 500;
 
     // Ability variables
     protected int baseCooldown = 10;
@@ -80,7 +82,6 @@ public class BaseBoss {
 
     public void tickPhase() {
         if(!phases.isEmpty()) {
-            BossPlugin.getPlugin().getLogger().info("Phases not empty");
             if(mob.getHealth()!=maxHealth) {
                 Phase currentPhase = phases.getFirst();
                 double currentHealth = mob.getHealth() / maxHealth;
@@ -103,8 +104,6 @@ public class BaseBoss {
                 }
 
             }
-        } else {
-            BossPlugin.getPlugin().getLogger().info("Phases empty");
         }
     }
 
@@ -131,6 +130,14 @@ public class BaseBoss {
         }
     }
 
+    public void tickRespawn() {
+        respawnTimer--;
+        if(respawnTimer<=0) {
+            spawnBoss();
+            respawnTimer=maxRespawnTimer;
+        }
+    }
+
     public void removeBossBar() {
         bossBar.removeAll();
     }
@@ -149,5 +156,10 @@ public class BaseBoss {
 
     public void setPhases(List<Phase> phases) {
         this.phases = phases;
+    }
+
+    public void setRespawnTimer(int respawnTimer) {
+        this.respawnTimer = respawnTimer;
+        maxRespawnTimer = respawnTimer;
     }
 }

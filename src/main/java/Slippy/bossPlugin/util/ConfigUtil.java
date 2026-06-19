@@ -48,13 +48,15 @@ public class ConfigUtil {
 
                 // Values are read from config and filled with placeholders if not found
                 String name = bossData.containsKey("name") ? (String) bossData.get("name") : "Unnamed Boss";
+                int health = bossData.containsKey("health") ? (int) bossData.get("health") : 100;
+                int respawnTimer = bossData.containsKey("respawnTimer") ? (int) bossData.get("respawnTimer") : 500;
                 String worldString = bossData.containsKey("world") ? (String) bossData.get("world") : "world";
                 Map<String, Object> spawnLoc = (Map<String, Object>) bossData.get("spawnLocation");
                 double spawnX = spawnLoc.containsKey("x") ? (double) spawnLoc.get("x") : 0;
                 double spawnY = spawnLoc.containsKey("y") ? (double) spawnLoc.get("y") : 80;
                 double spawnZ = spawnLoc.containsKey("z") ? (double) spawnLoc.get("z") : 0;
                 String mob = bossData.containsKey("mob") ? (String) bossData.get("mob") : "ZOMBIE";
-                int health = bossData.containsKey("health") ? (int) bossData.get("health") : 100;
+
 
                 // Load and parse attributes
                 List<Map<String, Object>> parsedAttributes = new ArrayList<>();
@@ -89,6 +91,7 @@ public class ConfigUtil {
                     boss.setName(name);
                     boss.createBossBar();
                     boss.setHealth(health);
+                    boss.setRespawnTimer(respawnTimer);
                     if(!phases.isEmpty()) {
                         boss.setPhases(phases);
                     }
