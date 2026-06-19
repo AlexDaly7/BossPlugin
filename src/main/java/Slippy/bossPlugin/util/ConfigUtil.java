@@ -87,6 +87,7 @@ public class ConfigUtil {
 
                     // Boss object is given values to apply to itself upon spawning
                     boss.setName(name);
+                    boss.createBossBar();
                     boss.setHealth(health);
                     if(!phases.isEmpty()) {
                         boss.setPhases(phases);

@@ -37,7 +37,7 @@ public class BaseBoss {
     protected Phase startingPhase;
 
     // Boss bar
-    protected BossBar bossBar = Bukkit.createBossBar("CRAZY EVIL SPIDER", BarColor.BLUE, BarStyle.SEGMENTED_6);
+    protected BossBar bossBar;
 
     public BaseBoss(World world, Location loc) {
         this.world = world;
@@ -69,6 +69,12 @@ public class BaseBoss {
                 baseCooldown = activePhase.getMaxBaseCooldown();
                 activePhase.getRanBaseAbility().activate(mob);
             }
+        }
+    }
+
+    public void createBossBar() {
+        if(name!=null) {
+            bossBar = Bukkit.createBossBar(name, BarColor.BLUE, BarStyle.SEGMENTED_6);
         }
     }
 
