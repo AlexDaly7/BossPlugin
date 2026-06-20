@@ -52,9 +52,9 @@ public class ConfigUtil {
                 int respawnTimer = bossData.containsKey("respawnTimer") ? (int) bossData.get("respawnTimer") : 500;
                 String worldString = bossData.containsKey("world") ? (String) bossData.get("world") : "world";
                 Map<String, Object> spawnLoc = (Map<String, Object>) bossData.get("spawnLocation");
-                double spawnX = spawnLoc.containsKey("x") ? (double) spawnLoc.get("x") : 0;
-                double spawnY = spawnLoc.containsKey("y") ? (double) spawnLoc.get("y") : 80;
-                double spawnZ = spawnLoc.containsKey("z") ? (double) spawnLoc.get("z") : 0;
+                double spawnX = spawnLoc.containsKey("x") ? ((Number) spawnLoc.get("x")).doubleValue() : 0;
+                double spawnY = spawnLoc.containsKey("y") ? ((Number) spawnLoc.get("y")).doubleValue() : 80;
+                double spawnZ = spawnLoc.containsKey("z") ? ((Number) spawnLoc.get("z")).doubleValue() : 0;
                 String mob = bossData.containsKey("mob") ? (String) bossData.get("mob") : "ZOMBIE";
 
 
