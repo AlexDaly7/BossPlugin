@@ -95,10 +95,14 @@ public class ConfigUtil {
                     boss.setRespawnTimer(respawnTimer);
                     if(!phases.isEmpty()) {
                         boss.setPhases(phases);
+                    } else {
+                        plugin.getLogger().info("No phases (or abilities) loaded for "+name);
                     }
 
                     if(!parsedAttributes.isEmpty()) {
                         boss.setAttributes(parsedAttributes);
+                    } else {
+                        plugin.getLogger().info("No attributes loaded for "+name);
                     }
                     bosses.add(boss);
 
@@ -115,6 +119,7 @@ public class ConfigUtil {
 
     public static Map<String, Object> parseAttribute(Map<String, Object> attributeData) {
         if(!attributeData.containsKey("attribute")||!attributeData.containsKey("value")) {
+            plugin.getLogger().info("Attribute field must contain an attribute and a value.");
             return null;
         }
         try {
@@ -132,6 +137,7 @@ public class ConfigUtil {
         List<Ability> baseAbilities = new ArrayList<Ability>();
         Phase phase;
         if(!phaseData.containsKey("health")||(double)phaseData.get("health")>1) {
+            plugin.getLogger().info("Phase must contain a health value under 1 to represent the percentage of health to change to this phase at.");
             return null;
         }
         // If there is not at least one ability list return null
@@ -140,6 +146,7 @@ public class ConfigUtil {
             &&
             (!phaseData.containsKey("baseAbilities")||!phaseData.containsKey("baseCooldown"))
         ) {
+            plugin.getLogger().info("Phase must contain either base or special abilities");
             return null;
         } else {
             phase = new Phase((double) phaseData.get("health"), (int) phaseData.get("baseCooldown"), (int) phaseData.get("specialCooldown"));
@@ -179,6 +186,7 @@ public class ConfigUtil {
 
     public static Ability parseAbility(Map<String, Object> abilityData) {
         if(!abilityData.containsKey("ability")) {
+            plugin.getLogger().info("Ability list must contain ability specification.");
             return null;
         }
         int range = abilityData.containsKey("range") ? (int) abilityData.get("range") : 50;
@@ -194,6 +202,7 @@ public class ConfigUtil {
 
     public static Particle parseParticle(Map<String, Object> particleData) {
         if(!particleData.containsKey("particle")) {
+            plugin.getLogger().info("Particle type must be present.");
             return null;
         }
         //int range = particleData.containsKey("range") ? (int) abilityData.get("range") : 50;
