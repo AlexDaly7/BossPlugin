@@ -1,6 +1,8 @@
 package Slippy.bossPlugin.bosses;
 
 import Slippy.bossPlugin.abilities.Ability;
+import org.bukkit.Particle;
+import org.bukkit.block.data.type.Bed;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,7 @@ public class Phase {
     private List<Ability> specialAbilities = new ArrayList<Ability>();
     private int maxBaseCooldown;
     private int maxSpecialCooldown;
+    private Particle particle;
 
     public Phase(double maxHealthRange, ArrayList<Ability> baseAbilities, ArrayList<Ability> specialAbilities, int maxBaseCooldown, int maxSpecialCooldown) {
         this.maxHealthRange = maxHealthRange;
@@ -61,5 +64,13 @@ public class Phase {
 
     public int getMaxBaseCooldown() {
         return maxBaseCooldown;
+    }
+
+    public void setParticle(Particle particle) {
+        this.particle = particle;
+    }
+
+    public Particle getParticle() {
+        return particle;
     }
 }

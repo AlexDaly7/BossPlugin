@@ -5,6 +5,7 @@ import java.util.List;
 
 import Slippy.bossPlugin.BossPlugin;
 import Slippy.bossPlugin.abilities.Ability;
+import Slippy.bossPlugin.util.TaskUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -92,6 +93,22 @@ public class BaseBoss {
                 }
                 if (activePhase != currentPhase) {
                     activePhase = currentPhase;
+                    mob.setInvulnerable(true);
+                    BossPlugin.getPlugin().getLogger().info("Invulnerablility: "+mob.isInvulnerable());
+                    TaskUtil.runTimedTaskWithEnd(() -> {
+                        world.spawnParticle(activePhase.getParticle(),
+                                mob.getX(),
+                                mob.getY(),
+                                mob.getZ(),
+                                10,
+                                1, 1, 1
+                        );
+                        BossPlugin.getPlugin().getLogger().info("Invulnerablility: "+mob.isInvulnerable());
+
+                    }, 0, 5, 8, () -> {
+                        mob.setInvulnerable(false);
+                        BossPlugin.getPlugin().getLogger().info("No longer invulnerable");
+                    });
                 }
             } else {
                 if(startingPhase==null) {

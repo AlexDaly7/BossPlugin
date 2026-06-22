@@ -21,4 +21,19 @@ public class TaskUtil {
             count[0]++;
         }, delay, interval);
     }
+
+    public static void runTimedTaskWithEnd(Runnable func, int delay, int interval, int iterations, Runnable endFunc) {
+        JavaPlugin plugin = BossPlugin.getPlugin();
+        BukkitTask[] task = new BukkitTask[1];
+        int[] count = new int[1];
+
+        task[0] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            if (count[0]>=iterations) {
+                task[0].cancel();
+                endFunc.run();
+            }
+            func.run();
+            count[0]++;
+        }, delay, interval);
+    }
 }

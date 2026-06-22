@@ -8,6 +8,7 @@ import Slippy.bossPlugin.bosses.CustomBoss;
 import Slippy.bossPlugin.bosses.Phase;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -133,13 +134,21 @@ public class ConfigUtil {
         if(!phaseData.containsKey("health")||(double)phaseData.get("health")>1) {
             return null;
         }
-        if(!phaseData.containsKey("specialAbilities")||!phaseData.containsKey("specialCooldown")) {
-            return null;
-        }
-        if(!phaseData.containsKey("baseAbilities")||!phaseData.containsKey("baseCooldown")) {
+        // If there is not at least one ability list return null
+        if(
+            (!phaseData.containsKey("specialAbilities")||!phaseData.containsKey("specialCooldown"))
+            &&
+            (!phaseData.containsKey("baseAbilities")||!phaseData.containsKey("baseCooldown"))
+        ) {
             return null;
         } else {
             phase = new Phase((double) phaseData.get("health"), (int) phaseData.get("baseCooldown"), (int) phaseData.get("specialCooldown"));
+            if(phaseData.containsKey("particles")) {
+               phase.setParticle(parseParticle((Map<String, Object>) phaseData.get("particles")));
+            } else {
+                phase.setParticle(Particle.GLOW);
+            }
+
             if (phaseData.containsKey("specialAbilities")) {
                 ArrayList<Map<String, Object>> abilities = (ArrayList) phaseData.get("specialAbilities");
                 if (!abilities.isEmpty()) {
@@ -179,6 +188,19 @@ public class ConfigUtil {
             return ability.create(range);
         } catch(IllegalArgumentException e) {
             plugin.getLogger().info(abilityData.get("ability")+" is not a valid ability.");
+            return null;
+        }
+    }
+
+    public static Particle parseParticle(Map<String, Object> particleData) {
+        if(!particleData.containsKey("particle")) {
+            return null;
+        }
+        //int range = particleData.containsKey("range") ? (int) abilityData.get("range") : 50;
+        try {
+            return Particle.valueOf((String) particleData.get("particle"));
+        } catch(IllegalArgumentException e) {
+            plugin.getLogger().info(particleData.get("ability")+" is not a valid particle.");
             return null;
         }
     }
