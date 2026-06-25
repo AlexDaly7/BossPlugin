@@ -62,6 +62,10 @@ public class BossManager {
                 task.cancel();
             }
         }
+        for(BaseBoss boss : bosses) {
+            boss.removeBossBar();
+            boss.despawnBoss();
+        }
 
     }
 

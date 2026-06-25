@@ -51,6 +51,10 @@ public class BaseBoss {
 
     public void spawnBoss() {}
 
+    public void despawnBoss() {
+        mob.remove();
+    }
+
     public void tickAbilities() {
         // Ensure abilities don't work if mob is not spawned or is dead.
         if(mob==null||mob.isDead()) return;
@@ -103,7 +107,6 @@ public class BaseBoss {
                                 10,
                                 1, 1, 1
                         );
-                        BossPlugin.getPlugin().getLogger().info("Invulnerablility: "+mob.isInvulnerable());
 
                     }, 0, 5, 8, () -> {
                         mob.setInvulnerable(false);

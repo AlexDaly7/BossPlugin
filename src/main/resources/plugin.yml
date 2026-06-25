@@ -5,3 +5,8 @@ api-version: '1.21'
 authors: [ Alex ]
 description: Custom YML configured bosses for paper 1.21.1 servers.
 website: not really...
+commands:
+  bossplugin:
+    description: Handles all commands for the plugin
+    usage: /BossPlugin [arg]
+    permission: bossplugin
