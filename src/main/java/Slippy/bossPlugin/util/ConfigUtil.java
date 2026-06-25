@@ -149,13 +149,21 @@ public class ConfigUtil {
             plugin.getLogger().info("Phase must contain either base or special abilities");
             return null;
         } else {
+            // Parse time and particles for transition
             phase = new Phase((double) phaseData.get("health"), (int) phaseData.get("baseCooldown"), (int) phaseData.get("specialCooldown"));
-            if(phaseData.containsKey("particles")) {
-               phase.setParticle(parseParticle((Map<String, Object>) phaseData.get("particles")));
-            } else {
-                phase.setParticle(Particle.GLOW);
+            if(phaseData.containsKey("transition")) {
+                Map<String, Object> transData = (Map<String, Object>) phaseData.get("transition");
+                if(transData.containsKey("time")) {
+                    phase.setTransitionTime(((Number) transData.get("time")).doubleValue());
+                }
+                if(transData.containsKey("particles")) {
+                    phase.setParticle(parseParticle((Map<String, Object>) transData.get("particles")));
+                } else {
+                    phase.setParticle(Particle.GLOW);
+                }
             }
 
+            // Parse array of special abilities
             if (phaseData.containsKey("specialAbilities")) {
                 ArrayList<Map<String, Object>> abilities = (ArrayList) phaseData.get("specialAbilities");
                 if (!abilities.isEmpty()) {
@@ -168,6 +176,8 @@ public class ConfigUtil {
                     phase.setSpecialAbilities(specialAbilities);
                 }
             }
+
+            // Parse array of base abilities
             if (phaseData.containsKey("baseAbilities")) {
                 ArrayList<Map<String, Object>> abilities = (ArrayList) phaseData.get("baseAbilities");
                 if (!abilities.isEmpty()) {

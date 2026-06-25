@@ -97,21 +97,18 @@ public class BaseBoss {
                 }
                 if (activePhase != currentPhase) {
                     activePhase = currentPhase;
-                    mob.setInvulnerable(true);
+                    mob.setNoDamageTicks((int) activePhase.getTransitionTime()*20);
                     BossPlugin.getPlugin().getLogger().info("Invulnerablility: "+mob.isInvulnerable());
-                    TaskUtil.runTimedTaskWithEnd(() -> {
+                    TaskUtil.runTimedTask(() -> {
                         world.spawnParticle(activePhase.getParticle(),
                                 mob.getX(),
                                 mob.getY(),
                                 mob.getZ(),
-                                10,
-                                1, 1, 1
+                                30,
+                                2, 2, 2
                         );
 
-                    }, 0, 5, 8, () -> {
-                        mob.setInvulnerable(false);
-                        BossPlugin.getPlugin().getLogger().info("No longer invulnerable");
-                    });
+                    }, 0, 2, (int) activePhase.getTransitionTime()*10);
                 }
             } else {
                 if(startingPhase==null) {

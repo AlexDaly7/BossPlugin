@@ -15,6 +15,7 @@ public class Phase {
     private int maxBaseCooldown;
     private int maxSpecialCooldown;
     private Particle particle;
+    private double transitionTime = 2;
 
     public Phase(double maxHealthRange, ArrayList<Ability> baseAbilities, ArrayList<Ability> specialAbilities, int maxBaseCooldown, int maxSpecialCooldown) {
         this.maxHealthRange = maxHealthRange;
@@ -72,5 +73,13 @@ public class Phase {
 
     public Particle getParticle() {
         return particle;
+    }
+
+    public void setTransitionTime(double transTime) {
+        transitionTime = transTime;
+    }
+
+    public double getTransitionTime() {
+        return transitionTime;
     }
 }
