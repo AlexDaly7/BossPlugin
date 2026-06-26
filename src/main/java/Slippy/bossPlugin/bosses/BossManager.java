@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BossManager {
     static BukkitTask[] task = new BukkitTask[3];
@@ -72,5 +73,9 @@ public class BossManager {
 
     public static void add(BaseBoss boss) {
         bosses.add(boss);
+    }
+
+    public static List<BaseBoss> getBosses() {
+        return bosses;
     }
 }

@@ -2,11 +2,15 @@ package Slippy.bossPlugin.bosses;
 
 import Slippy.bossPlugin.BossPlugin;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Map;
@@ -30,6 +34,8 @@ public class CustomBoss extends BaseBoss {
         });
         mob.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
         mob.setHealth(maxHealth);
+        mob.addScoreboardTag("boss");
+        mob.addScoreboardTag(name);
         applyAttributes();
     }
 
@@ -43,7 +49,4 @@ public class CustomBoss extends BaseBoss {
         });
     }
 
-    //public void setPhases(ArrayList<> phases) {
-
-    //}
 }

@@ -2,12 +2,14 @@ package Slippy.bossPlugin.bosses;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import Slippy.bossPlugin.BossPlugin;
 import Slippy.bossPlugin.abilities.Ability;
 import Slippy.bossPlugin.util.TaskUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -15,6 +17,7 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Mob;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.loot.Lootable;
 
 public class BaseBoss {
     // Base boss class, contains methods to tick abilities.
@@ -38,6 +41,9 @@ public class BaseBoss {
     protected List<Phase> phases = new ArrayList<Phase>();
     protected Phase activePhase;
     protected Phase startingPhase;
+
+    //LootList items
+    private List<Map<String, Object>> lootList;
 
     // Boss bar
     protected BossBar bossBar;
@@ -119,7 +125,6 @@ public class BaseBoss {
                         }
                     }
                 }
-
             }
         }
     }
@@ -178,5 +183,13 @@ public class BaseBoss {
     public void setRespawnTimer(int respawnTimer) {
         this.respawnTimer = respawnTimer;
         maxRespawnTimer = respawnTimer;
+    }
+
+    public void setLootList(List lootList) {
+        this.lootList = lootList;
+    }
+
+    public List getLootList() {
+        return lootList;
     }
 }

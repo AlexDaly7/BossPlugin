@@ -2,6 +2,7 @@ package Slippy.bossPlugin;
 
 import Slippy.bossPlugin.bosses.BossManager;
 import Slippy.bossPlugin.commands.BossPluginCommand;
+import Slippy.bossPlugin.listeners.BossDeathListener;
 import Slippy.bossPlugin.util.ConfigUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,6 +25,8 @@ public final class BossPlugin extends JavaPlugin {
         BossManager.loadBosses(ConfigUtil.getBosses());
         BossManager.start();
 
+        // Load listeners
+        Bukkit.getPluginManager().registerEvents(new BossDeathListener(), this);
     }
 
     @Override

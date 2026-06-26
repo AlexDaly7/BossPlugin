@@ -6,10 +6,7 @@ import Slippy.bossPlugin.abilities.AbilityType;
 import Slippy.bossPlugin.bosses.BaseBoss;
 import Slippy.bossPlugin.bosses.CustomBoss;
 import Slippy.bossPlugin.bosses.Phase;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -83,6 +80,18 @@ public class ConfigUtil {
                     }
                 }
 
+                // Load and parse loottable items
+                List<Map<String, Object>> items = new ArrayList<>();
+                List<Map<String, Object>> lootData = (ArrayList) bossData.get("loottable");
+                if(!lootData.isEmpty()) {
+                    for(Map<String, Object> item : lootData) {
+                        Map<String, Object> parsed = parseLoottable(item);
+                        if(parsed!=null) {
+                            items.add(parsed);
+                        }
+                    }
+                }
+
                 // Values are applied to create boss
                 World world = Bukkit.getWorld(worldString);
                 if(world!=null) {
@@ -93,6 +102,7 @@ public class ConfigUtil {
                     boss.createBossBar();
                     boss.setHealth(health);
                     boss.setRespawnTimer(respawnTimer);
+                    boss.setLootList(items);
                     if(!phases.isEmpty()) {
                         boss.setPhases(phases);
                     } else {
@@ -220,6 +230,19 @@ public class ConfigUtil {
             return Particle.valueOf((String) particleData.get("particle"));
         } catch(IllegalArgumentException e) {
             plugin.getLogger().info(particleData.get("ability")+" is not a valid particle.");
+            return null;
+        }
+    }
+
+    public static Map<String, Object> parseLoottable(Map<String, Object> lootData) {
+        if(!lootData.containsKey("item")&&lootData.containsKey("amount")) return null;
+        if((int)lootData.get("amount")<=0) return null;
+
+        try {
+            Material material = Material.valueOf((String) lootData.get("item"));
+            return Map.of("item", material, "amount", lootData.get("amount"));
+        } catch (IllegalArgumentException e) {
+            plugin.getLogger().info("Item "+lootData.get("item")+" is not a valid item.");
             return null;
         }
     }
