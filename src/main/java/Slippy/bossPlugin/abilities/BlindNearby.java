@@ -21,8 +21,8 @@ public class BlindNearby extends Ability {
     public void activate(Mob mob) {
         Location loc = mob.getLocation();
         World world = mob.getWorld();
-        ArrayList<Player> players = new ArrayList<Player>(loc.getNearbyPlayers(range));
-        if(players.getFirst()!=null) {
+        if(!loc.getNearbyPlayers(range).isEmpty()) {
+            ArrayList<Player> players = new ArrayList<Player>(loc.getNearbyPlayers(range));
             // Effects around mob who activated ability
             TaskUtil.runTimedTask(() -> {
                 world.spawnParticle(
