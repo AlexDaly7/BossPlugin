@@ -34,8 +34,8 @@ public class BaseBoss {
     protected int maxSpecialCooldown;
 
     // Ability lists
-    protected ArrayList<Ability> baseAbilities = new ArrayList();
-    protected ArrayList<Ability> specialAbilities = new ArrayList();
+    protected ArrayList<Ability> baseAbilities = new ArrayList<Ability>();
+    protected ArrayList<Ability> specialAbilities = new ArrayList<Ability>();
     // Boss bar
     protected BossBar bossBar = Bukkit.createBossBar("CRAZY EVIL SPIDER", BarColor.BLUE, BarStyle.SEGMENTED_6);
 
