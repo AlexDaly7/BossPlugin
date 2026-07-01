@@ -1,8 +1,47 @@
 bosses:
  - name: "evilBoss..."
-   mob: "SPIDER"
+   mob: "SKELETON"
+   world: "world"
+   health: 100
+   respawnTimer: 10
+   spawnLocation:
+    x: 200
+    y: 83.0
+    z: 200.0
    attributes:
-     - generic-scale: 2
-     - generic-movement-speed: 0.4
- - name: "good boss.."
-
+    - attribute: "generic_scale"
+      value: 2.0
+   loottable:
+    - item: DIAMOND
+      amount: 5
+    - item: EMERALD
+      amount: 10
+   phases:
+    - health: 1.0
+      specialCooldown: 10
+      baseCooldown: 5
+      transition:
+       particles:
+        particle: "GLOW"
+        amount: 10
+       time: 5
+      specialAbilities:
+       - ability: "EVOKER_FANG_STRIKE"
+         range: 100
+      baseAbilities:
+       - ability: "EXPLOSION"
+         range: 100
+    - health: 0.7
+      specialCooldown: 5
+      baseCooldown: 1
+      transition:
+       particles:
+        particle: "GLOW"
+        amount: 10
+       time: 5
+      specialAbilities:
+       - ability: "BLIND_NEARBY"
+         range: 100
+      baseAbilities:
+       - ability: "EVOKER_FANG_STRIKE"
+         range: 100

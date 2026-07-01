@@ -209,11 +209,10 @@ public class ConfigUtil {
             plugin.getLogger().info("Ability list must contain ability specification.");
             return null;
         }
-        int range = abilityData.containsKey("range") ? (int) abilityData.get("range") : 50;
         AbilityType ability;
         try {
             ability = AbilityType.valueOf((String) abilityData.get("ability"));
-            return ability.create(range);
+            return ability.create(abilityData);
         } catch(IllegalArgumentException e) {
             plugin.getLogger().info(abilityData.get("ability")+" is not a valid ability.");
             return null;

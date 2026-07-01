@@ -7,10 +7,12 @@ import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
 
+import java.util.Map;
+
 public class SummonSpiders extends Ability {
 
-    public SummonSpiders(int range) {
-        super(range);
+    public SummonSpiders(Map<String, Object> data) {
+        super(data);
     }
 
     @Override

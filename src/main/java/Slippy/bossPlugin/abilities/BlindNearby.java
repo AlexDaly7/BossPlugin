@@ -6,21 +6,22 @@ import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class BlindNearby extends Ability {
 
-    public BlindNearby(int range) {
-        super(range);
+    public BlindNearby(Map<String, Object> data) {
+        super(data);
     }
 
     @Override
     public void activate(Mob mob) {
         Location loc = mob.getLocation();
         World world = mob.getWorld();
+        int range = data.containsKey("range") ? (int) data.get("range") : 50;
         if(!loc.getNearbyPlayers(range).isEmpty()) {
             ArrayList<Player> players = new ArrayList<Player>(loc.getNearbyPlayers(range));
             // Effects around mob who activated ability

@@ -2,11 +2,13 @@ package Slippy.bossPlugin.abilities;
 
 import org.bukkit.entity.Mob;
 
-public class Ability {
-    protected int range;
+import java.util.Map;
 
-    public Ability(int range) {
-        this.range = range;
+public class Ability {
+    protected Map<String, Object> data;
+
+    public Ability(Map<String, Object> data) {
+        this.data = data;
     }
 
     public void activate(Mob mob) {

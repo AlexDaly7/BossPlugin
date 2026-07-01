@@ -7,14 +7,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.entity.Mob;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Explosion extends Ability {
 
-    public Explosion(int range) {
-        super(range);
+    public Explosion(Map<String, Object> data) {
+        super(data);
     }
     public void activate(Mob mob) {
         Location loc = mob.getLocation();
+        int range = data.containsKey("range") ? (int) data.get("range") : 50;
 
         // Ensure players are nearby
         if(!loc.getNearbyPlayers(range).isEmpty()) {

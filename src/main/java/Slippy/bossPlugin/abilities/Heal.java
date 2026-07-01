@@ -2,10 +2,12 @@ package Slippy.bossPlugin.abilities;
 
 import org.bukkit.entity.Mob;
 
+import java.util.Map;
+
 public class Heal extends Ability {
 
-    public Heal(int range) {
-        super(range);
+    public Heal(Map<String, Object> data) {
+        super(data);
     }
 
     @Override
