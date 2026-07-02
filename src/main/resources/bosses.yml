@@ -29,7 +29,7 @@ bosses:
        - ability: "EVOKER_FANG_STRIKE"
          range: 100
       baseAbilities:
-       - ability: "EXPLOSION"
+       - ability: "SUMMON_MINIONS"
          range: 100
     - health: 0.7
       specialCooldown: 5
