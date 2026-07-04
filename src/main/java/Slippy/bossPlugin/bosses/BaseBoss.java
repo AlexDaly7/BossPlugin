@@ -192,4 +192,8 @@ public class BaseBoss {
     public List getLootList() {
         return lootList;
     }
+
+    public Location getLocation() {
+        return mob.getLocation();
+    }
 }
