@@ -32,6 +32,12 @@ public enum AbilityType {
         public Ability create(Map<String, Object> data) {
             return new Heal(data);
         }
+    },
+    METEOR {
+        @Override
+        public Ability create(Map<String, Object> data) {
+            return new Meteor(data);
+        }
     };
 
     public abstract Ability create(Map<String, Object> data);

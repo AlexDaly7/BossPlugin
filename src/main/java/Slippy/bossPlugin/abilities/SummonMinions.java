@@ -28,14 +28,12 @@ public class SummonMinions extends Ability {
             Location[] mobLoc = new Location[1];
             mobLoc[0] = loc.clone().add((Math.random()*(range*2))-range, 2, (Math.random()*(range*2))-range);
             TaskUtil.runTimedTaskWithEnd(() -> {
-                BossPlugin.getPlugin().getLogger().warning("Spawning particle before minion");
-                world.spawnParticle(Particle.ASH,
+                world.spawnParticle(Particle.PORTAL,
                         mobLoc[0],
-                        20,
-                        0.5, 3, 0.5
+                        70,
+                        0.5, 1, 0.5
                         );
             }, 0, 5, 6, () -> {
-                BossPlugin.getPlugin().getLogger().warning("Spawning minion");
                 world.spawnEntity(mobLoc[0], mob.getType());
             });
         }

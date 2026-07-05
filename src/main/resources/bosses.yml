@@ -29,8 +29,8 @@ bosses:
        - ability: "EVOKER_FANG_STRIKE"
          range: 100
       baseAbilities:
-       - ability: "SUMMON_MINIONS"
-         range: 100
+       - ability: "METEOR"
+         range: 50
     - health: 0.7
       specialCooldown: 5
       baseCooldown: 1
