@@ -23,15 +23,14 @@ public class BossDeathListener implements Listener {
         for(BaseBoss boss : BossManager.getBosses()) {
             List<Map<String, Object>> lootList = boss.getLootList();
             Location loc = boss.getLocation();
+
+            // Removes fire from around the boss to stop drops from being burnt
             double radius = 3;
             loc.add(-((radius/2)-1),0,-((radius/2)-1));
-
             for(int i=0;i<=radius;i++) {
                 loc.add(0,0,-radius);
                 for(int j=0;j<=radius;j++) {
-                    BossPlugin.getPlugin().getLogger().info(loc.getX()+", "+loc.getY()+", "+loc.getZ());
                     if(loc.getBlock().getType()==Material.FIRE) {
-                        BossPlugin.getPlugin().getLogger().info("Block Replaced");
                         loc.getBlock().setType(Material.AIR);
                     }
                     loc.add(0,0,1);
@@ -39,9 +38,20 @@ public class BossDeathListener implements Listener {
                 loc.add(1,0,0);
             }
             for(Map<String, Object> loot : lootList) {
-                event.getDrops().add(new ItemStack((Material) loot.get("item"),(int) loot.get("amount")));
+                // If loot map contains chance, check chance before adding drop
+                if(loot.containsKey("chance")) {
+                    double chance = loot.containsKey("chance") ? ((Number)loot.get("chance")).doubleValue() : 1;
+                    if(chance<=1) {
+                        if(Math.random()<=chance) {
+                            event.getDrops().add(new ItemStack((Material) loot.get("item"), (int) loot.get("amount")));
+                        }
+                    } else {
+                        BossPlugin.getPlugin().getLogger().info("Chance for "+loot.get("item")+" should be below 1");
+                    }
+                } else {
+                    event.getDrops().add(new ItemStack((Material) loot.get("item"), (int) loot.get("amount")));
+                }
             }
-
         }
     }
 }

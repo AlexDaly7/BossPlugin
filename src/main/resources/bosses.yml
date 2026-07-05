@@ -14,8 +14,10 @@ bosses:
    loottable:
     - item: DIAMOND
       amount: 5
+      chance: 0.5
     - item: EMERALD
       amount: 10
+      chance: 0.9
    phases:
     - health: 1.0
       specialCooldown: 10

@@ -239,7 +239,11 @@ public class ConfigUtil {
 
         try {
             Material material = Material.valueOf((String) lootData.get("item"));
-            return Map.of("item", material, "amount", lootData.get("amount"));
+            if(lootData.containsKey("chance")) {
+                return Map.of("item", material, "amount", lootData.get("amount"), "chance", lootData.get("chance"));
+            } else {
+                return Map.of("item", material, "amount", lootData.get("amount"));
+            }
         } catch (IllegalArgumentException e) {
             plugin.getLogger().info("Item "+lootData.get("item")+" is not a valid item.");
             return null;
