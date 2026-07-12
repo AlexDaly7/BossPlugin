@@ -20,6 +20,11 @@ bosses:
       chance: 0.9
    phases:
     - health: 1.0
+      effects:
+        - effect: "POTION"
+          potion: "JUMP_BOOST"
+          range: 20
+          amplifier: 10
       specialCooldown: 10
       baseCooldown: 5
       transition:

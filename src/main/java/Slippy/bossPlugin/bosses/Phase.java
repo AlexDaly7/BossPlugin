@@ -1,8 +1,9 @@
 package Slippy.bossPlugin.bosses;
 
 import Slippy.bossPlugin.abilities.Ability;
+import Slippy.bossPlugin.passiveEffects.PassiveEffect;
 import org.bukkit.Particle;
-import org.bukkit.block.data.type.Bed;
+import org.bukkit.entity.Mob;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,8 @@ public class Phase {
     private int maxSpecialCooldown;
     private Particle particle;
     private double transitionTime = 2;
+    private List<PassiveEffect> passiveEffects = new ArrayList<PassiveEffect>();
+    private Mob mob;
 
     public Phase(double maxHealthRange, ArrayList<Ability> baseAbilities, ArrayList<Ability> specialAbilities, int maxBaseCooldown, int maxSpecialCooldown) {
         this.maxHealthRange = maxHealthRange;
@@ -81,5 +84,19 @@ public class Phase {
 
     public double getTransitionTime() {
         return transitionTime;
+    }
+
+    public void addEffect(PassiveEffect passiveEffect) {
+        passiveEffects.add(passiveEffect);
+    }
+
+    public void activateEffects(Mob mob) {
+        for(PassiveEffect effect : passiveEffects) {
+            effect.activate(mob);
+        }
+    }
+
+    public void setMob(Mob mob) {
+        this.mob = mob;
     }
 }

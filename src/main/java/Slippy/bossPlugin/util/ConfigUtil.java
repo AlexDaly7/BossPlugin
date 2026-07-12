@@ -6,6 +6,8 @@ import Slippy.bossPlugin.abilities.AbilityType;
 import Slippy.bossPlugin.bosses.BaseBoss;
 import Slippy.bossPlugin.bosses.CustomBoss;
 import Slippy.bossPlugin.bosses.Phase;
+import Slippy.bossPlugin.passiveEffects.PassiveEffect;
+import Slippy.bossPlugin.passiveEffects.PassiveEffectType;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -200,7 +202,26 @@ public class ConfigUtil {
                     phase.setBaseAbilities(baseAbilities);
                 }
             }
+
+            // Parse array of effects
+            if(phaseData.containsKey("effects")) {
+                for (Map<String, Object> effect : (ArrayList<Map<String, Object>>) phaseData.get("effects")) {
+                    PassiveEffect parsedEffect = parseEffect(effect);
+                    if (parsedEffect != null) {
+                        phase.addEffect(parsedEffect);
+                    }
+                }
+            }
             return phase;
+        }
+    }
+
+    public static PassiveEffect parseEffect(Map<String, Object> effectData) {
+        try {
+            return PassiveEffectType.valueOf((String) effectData.get("effect")).create(effectData);
+        } catch(IllegalArgumentException e) {
+            plugin.getLogger().warning(effectData.get("effect")+" is not a valid effect.");
+            return null;
         }
     }
 
