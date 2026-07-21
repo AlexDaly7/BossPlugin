@@ -4,6 +4,7 @@ import Slippy.bossPlugin.BossPlugin;
 import Slippy.bossPlugin.util.TaskUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.entity.Mob;
 import java.util.ArrayList;
@@ -13,7 +14,11 @@ public class Explosion extends Ability {
 
     public Explosion(Map<String, Object> data) {
         super(data);
+        name = "Explosion";
+        lore = "Players locations start to flash and explode.";
+        displayItem = new ItemStack(Material.TNT);
     }
+
     public void activate(Mob mob) {
         Location loc = mob.getLocation();
         int range = data.containsKey("range") ? (int) data.get("range") : 50;

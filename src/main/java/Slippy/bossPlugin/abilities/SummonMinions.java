@@ -3,9 +3,11 @@ package Slippy.bossPlugin.abilities;
 import Slippy.bossPlugin.BossPlugin;
 import Slippy.bossPlugin.util.TaskUtil;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Mob;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
@@ -13,6 +15,9 @@ public class SummonMinions extends Ability {
 
     public SummonMinions(Map<String, Object> data) {
         super(data);
+        name = "Summon Minions";
+        lore = "Summons mobs of the same type around the boss.";
+        displayItem = new ItemStack(Material.POTION);
     }
 
     @Override

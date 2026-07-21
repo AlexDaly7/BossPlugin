@@ -2,10 +2,12 @@ package Slippy.bossPlugin.abilities;
 
 import Slippy.bossPlugin.util.TaskUtil;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
@@ -15,6 +17,9 @@ public class BlindNearby extends Ability {
 
     public BlindNearby(Map<String, Object> data) {
         super(data);
+        name = "Blind Nearby";
+        lore = "Blinds nearby players momentarily.";
+        displayItem = new ItemStack(Material.POTION);
     }
 
     @Override

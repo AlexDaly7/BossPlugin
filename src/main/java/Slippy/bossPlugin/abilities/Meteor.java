@@ -2,12 +2,14 @@ package Slippy.bossPlugin.abilities;
 
 import Slippy.bossPlugin.util.TaskUtil;
 import net.kyori.adventure.audience.Audience;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.Map;
@@ -16,6 +18,9 @@ public class Meteor extends Ability {
 
     public Meteor(Map<String, Object> data) {
         super(data);
+        name = "Meteor";
+        lore = "Sends meteors from the sky at each player within range.";
+        displayItem = new ItemStack(Material.MAGMA_BLOCK);
     }
 
     @Override

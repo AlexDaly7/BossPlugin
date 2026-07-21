@@ -2,13 +2,11 @@ package Slippy.bossPlugin.abilities;
 
 import Slippy.bossPlugin.BossPlugin;
 import Slippy.bossPlugin.util.TaskUtil;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -17,6 +15,9 @@ public class EvokerFangStrike extends Ability {
 
     public EvokerFangStrike(Map<String, Object> data) {
         super(data);
+        name = "Evoker Fang Strike";
+        lore = "A line of Evoker Fangs spring from the ground towards the nearest player.";
+        displayItem = new ItemStack(Material.TOTEM_OF_UNDYING);
     }
 
     @Override
