@@ -37,7 +37,6 @@ public class Potion extends PassiveEffect {
             }
             for(Player player : players) {
                 player.addPotionEffect(potionEffect);
-                BossPlugin.getPlugin().getLogger().warning(potionEffect.toString());
             }
         }
     }

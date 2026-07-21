@@ -145,7 +145,6 @@ public class BaseBoss {
             for (Player player : bossBar.getPlayers()) {
                 if (!players.contains(player)) {
                     bossBar.removePlayer(player);
-                    BossPlugin.getPlugin().getLogger().info(player.getName()+" removed from bossbar");
                 }
             }
             double percentage = mob.getHealth() / mob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
@@ -171,6 +170,10 @@ public class BaseBoss {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setHealth(int health) {

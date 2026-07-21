@@ -36,8 +36,8 @@ bosses:
        - ability: "EVOKER_FANG_STRIKE"
          range: 100
       baseAbilities:
-       - ability: "METEOR"
-         range: 50
+       - ability: "HEAL"
+         amount: 1
     - health: 0.7
       specialCooldown: 5
       baseCooldown: 1
