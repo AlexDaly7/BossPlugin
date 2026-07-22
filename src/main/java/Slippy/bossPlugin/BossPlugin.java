@@ -3,6 +3,7 @@ package Slippy.bossPlugin;
 import Slippy.bossPlugin.bosses.BossManager;
 import Slippy.bossPlugin.commands.BossPluginCommand;
 import Slippy.bossPlugin.listeners.BossDeathListener;
+import Slippy.bossPlugin.listeners.EditorChatListener;
 import Slippy.bossPlugin.listeners.MenuClickListener;
 import Slippy.bossPlugin.util.ConfigUtil;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,6 +30,7 @@ public final class BossPlugin extends JavaPlugin {
         // Load listeners
         Bukkit.getPluginManager().registerEvents(new BossDeathListener(), this);
         Bukkit.getPluginManager().registerEvents(new MenuClickListener(), this);
+        Bukkit.getPluginManager().registerEvents(new EditorChatListener(), this);
     }
 
     @Override

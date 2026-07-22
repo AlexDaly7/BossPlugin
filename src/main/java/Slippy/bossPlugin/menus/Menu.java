@@ -10,6 +10,7 @@ public class Menu {
     protected Player player;
     protected MenuSession session;
     protected Inventory menu;
+    protected Enum<?> currentInput;
 
     public Menu(Player player, MenuSession session) {
         this.player = player;
@@ -17,6 +18,8 @@ public class Menu {
     }
 
     public void handleClick(int slot) {}
+
+    public void handleTextInput(String input) {}
 
     public void openSelf() {
         player.openInventory(menu);

@@ -23,8 +23,7 @@ public class MainMenu extends Menu {
                     List.of(Component.text("Click to see all active bosses"))
                 )
         );
-
-        menu.setItem(10,
+        menu.setItem(9,
                 MenuUtil.createButton(
                     Material.NETHER_STAR,
                     Component.text("Create boss"),
@@ -40,7 +39,7 @@ public class MainMenu extends Menu {
             case 0 -> {
                 session.openMenu(new BossListMenu(player, session));
             }
-            case 10 -> {
+            case 9 -> {
                 session.openMenu(new BossCreationMenu(player, session));
             }
         }
