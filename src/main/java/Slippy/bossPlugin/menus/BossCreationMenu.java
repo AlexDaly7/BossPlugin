@@ -5,6 +5,9 @@ import Slippy.bossPlugin.util.MenuUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -26,6 +29,14 @@ public class BossCreationMenu extends Menu {
                         List.of(Component.text("Click to set boss name"))
                 )
         );
+        menu.setItem(1,
+                MenuUtil.createButton(
+                        Material.CREEPER_HEAD,
+                        Component.text("Set boss mob type"),
+                        List.of(Component.text("Click to set boss mob type"))
+                )
+        );
+
 
         session.setBoss(new BaseBoss(player.getWorld(), player.getLocation()));
     }
@@ -37,6 +48,9 @@ public class BossCreationMenu extends Menu {
                 menu.close();
                 player.sendMessage("Please enter the name of the boss");
                 currentInput = inputEnum.NAME;
+            }
+            case 1 -> {
+                session.openMenu(new BossTypeMenu(player, session));
             }
         }
     }
