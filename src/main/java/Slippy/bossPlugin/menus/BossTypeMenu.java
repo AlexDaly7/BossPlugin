@@ -53,22 +53,43 @@ public class BossTypeMenu extends Menu {
                         List.of(Component.text("Click to go to previous page"))
                 )
         );
+        ItemStack backBtn = MenuUtil.createButton(
+                Material.STRUCTURE_BLOCK,
+                Component.text("Return to boss creation menu"),
+                List.of(Component.text("Click to go back to the boss creation menu"))
+        );
+        menu.setItem(49, backBtn);
+        secondMenu.setItem(49, backBtn);
 
     }
 
     @Override
     public void handleClick(int slot) {
+        if(slot==49) {
+            if(page==0) menu.close();
+            if(page==1) secondMenu.close();
+            session.openMenu(new BossCreationMenu(player, session));
+            return;
+        }
         if(page==0) {
             if(slot==52) {
                 menu.close();
                 player.openInventory(secondMenu);
                 page = 1;
+            } else if(slot<45){
+                session.getBoss().setEntityType(mobs.get(slot));
+                menu.close();
+                session.openMenu(new BossCreationMenu(player, session));
             }
         } else if(page==1) {
             if(slot==46) {
                 secondMenu.close();
                 player.openInventory(menu);
                 page = 0;
+            } else if(slot<45){
+                session.getBoss().setEntityType(mobs.get(slot+45));
+                secondMenu.close();
+                session.openMenu(new BossCreationMenu(player, session));
             }
         }
     }

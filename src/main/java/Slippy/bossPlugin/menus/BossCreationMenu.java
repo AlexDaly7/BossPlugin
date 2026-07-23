@@ -1,6 +1,7 @@
 package Slippy.bossPlugin.menus;
 
 import Slippy.bossPlugin.bosses.BaseBoss;
+import Slippy.bossPlugin.bosses.CustomBoss;
 import Slippy.bossPlugin.util.MenuUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -38,7 +39,7 @@ public class BossCreationMenu extends Menu {
         );
 
 
-        session.setBoss(new BaseBoss(player.getWorld(), player.getLocation()));
+        session.setBoss(new CustomBoss(player.getWorld(), player.getLocation()));
     }
 
     @Override

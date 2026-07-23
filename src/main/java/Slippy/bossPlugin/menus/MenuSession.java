@@ -1,6 +1,7 @@
 package Slippy.bossPlugin.menus;
 
 import Slippy.bossPlugin.bosses.BaseBoss;
+import Slippy.bossPlugin.bosses.CustomBoss;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -11,7 +12,7 @@ public class MenuSession {
     public static Map<UUID, MenuSession> sessions = new HashMap<UUID, MenuSession>();
     private Menu currentMenu;
     private Menu lastMenu;
-    private BaseBoss boss;
+    private CustomBoss boss;
 
     public MenuSession(Player player) {
         currentMenu = new MainMenu(player, this);
@@ -48,11 +49,11 @@ public class MenuSession {
         currentMenu.openSelf();
     }
 
-    public void setBoss(BaseBoss boss) {
+    public void setBoss(CustomBoss boss) {
         this.boss = boss;
     }
 
-    public BaseBoss getBoss() {
+    public CustomBoss getBoss() {
         return boss;
     }
 }

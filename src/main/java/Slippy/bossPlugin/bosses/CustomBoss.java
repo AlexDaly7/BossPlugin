@@ -20,6 +20,11 @@ public class CustomBoss extends BaseBoss {
     private EntityType entityType;
     private List<Map<String, Object>> attributes;
 
+    public CustomBoss(World world, Location loc) {
+        this.world = world;
+        this.spawnLoc = loc;
+    }
+
     public CustomBoss(World world, Location loc, EntityType entityType) {
         this.world = world;
         this.spawnLoc = loc;
@@ -49,4 +54,11 @@ public class CustomBoss extends BaseBoss {
         });
     }
 
+    public EntityType getEntityType() {
+        return entityType;
+    }
+
+    public void setEntityType(EntityType entityType) {
+        this.entityType = entityType;
+    }
 }
