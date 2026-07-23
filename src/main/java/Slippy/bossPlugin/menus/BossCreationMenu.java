@@ -38,8 +38,9 @@ public class BossCreationMenu extends Menu {
                 )
         );
 
-
-        session.setBoss(new CustomBoss(player.getWorld(), player.getLocation()));
+        if(session.getBoss()==null) {
+            session.setBoss(new CustomBoss(player.getWorld(), player.getLocation()));
+        }
     }
 
     @Override
