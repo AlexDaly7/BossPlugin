@@ -10,16 +10,18 @@ import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class BossTypeMenu extends Menu {
     Inventory secondMenu;
     List<EntityType> mobs;
     int page = 0;
-
     public BossTypeMenu(Player player, MenuSession session) {
         super(player, session);
         menu = Bukkit.createInventory(player, 54, "Set mob type");
@@ -28,15 +30,22 @@ public class BossTypeMenu extends Menu {
                 .filter(type -> type.getEntityClass()!=null)
                 .filter(type -> Mob.class.isAssignableFrom(type.getEntityClass()))
                 .collect(Collectors.toList());
+        Map<EntityType, ItemStack> map = new HashMap<>();
         for(int i=0;i<mobs.size();i++) {
-            ItemStack item = MenuUtil.createButton(Material.BAT_SPAWN_EGG,
-                    Component.text(mobs.get(i).getName()),
-                    List.of(Component.text(mobs.get(i).getKey().toString()))
-            );
+            // Attempt to find spawn egg of mob type, if not set item to spawner
+            ItemStack displayItem;
+            try {
+                displayItem = new ItemStack(Material.getMaterial(mobs.get(i).name().toString()+"_SPAWN_EGG"));
+            } catch(IllegalArgumentException e) {
+                displayItem = new ItemStack(Material.SPAWNER);
+            }
+            ItemMeta meta = displayItem.getItemMeta();
+            meta.displayName(Component.text(mobs.get(i).name()));
+            displayItem.setItemMeta(meta);
             if(i<=44) {
-                menu.setItem(i, item);
+                menu.setItem(i, displayItem);
             } else {
-                secondMenu.setItem(i-45, item);
+                secondMenu.setItem(i-45, displayItem);
             }
         }
         menu.setItem(52,
