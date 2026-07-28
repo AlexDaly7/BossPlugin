@@ -18,88 +18,38 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class BossTypeMenu extends Menu {
-    Inventory secondMenu;
+public class BossTypeMenu extends MultiPageMenu {
     List<EntityType> mobs;
-    int page = 0;
+
     public BossTypeMenu(Player player, MenuSession session) {
         super(player, session);
-        menu = Bukkit.createInventory(player, 54, "Set mob type");
-        secondMenu = Bukkit.createInventory(player, 54, "Set mob type");
+        menuName = "Boss Type Selection";
         mobs = Arrays.stream(EntityType.values())
                 .filter(type -> type.getEntityClass()!=null)
                 .filter(type -> Mob.class.isAssignableFrom(type.getEntityClass()))
                 .collect(Collectors.toList());
-        Map<EntityType, ItemStack> map = new HashMap<>();
         for(int i=0;i<mobs.size();i++) {
             // Attempt to find spawn egg of mob type, if not set item to spawner
-            ItemStack displayItem;
+            ItemStack itemStack;
             try {
-                displayItem = new ItemStack(Material.getMaterial(mobs.get(i).name().toString()+"_SPAWN_EGG"));
+                itemStack = new ItemStack(Material.getMaterial(mobs.get(i).name().toString()+"_SPAWN_EGG"));
             } catch(IllegalArgumentException e) {
-                displayItem = new ItemStack(Material.SPAWNER);
+                itemStack = new ItemStack(Material.SPAWNER);
             }
-            ItemMeta meta = displayItem.getItemMeta();
+            ItemMeta meta = itemStack.getItemMeta();
             meta.displayName(Component.text(mobs.get(i).name()));
-            displayItem.setItemMeta(meta);
-            if(i<=44) {
-                menu.setItem(i, displayItem);
-            } else {
-                secondMenu.setItem(i-45, displayItem);
-            }
-        }
-        menu.setItem(52,
-                MenuUtil.createButton(
-                        Material.COMMAND_BLOCK,
-                        Component.text("Go to next page"),
-                        List.of(Component.text("Click to go to next page"))
-                )
-        );
-        secondMenu.setItem(46,
-                MenuUtil.createButton(
-                        Material.COMMAND_BLOCK,
-                        Component.text("Go to previous page"),
-                        List.of(Component.text("Click to go to previous page"))
-                )
-        );
-        ItemStack backBtn = MenuUtil.createButton(
-                Material.STRUCTURE_BLOCK,
-                Component.text("Return to boss creation menu"),
-                List.of(Component.text("Click to go back to the boss creation menu"))
-        );
-        menu.setItem(49, backBtn);
-        secondMenu.setItem(49, backBtn);
+            itemStack.setItemMeta(meta);
 
+            items.add(itemStack);
+        }
+        fillPages();
     }
 
     @Override
     public void handleClick(int slot) {
-        if(slot==49) {
-            if(page==0) menu.close();
-            if(page==1) secondMenu.close();
-            session.openMenu(new BossCreationMenu(player, session));
-            return;
-        }
-        if(page==0) {
-            if(slot==52) {
-                menu.close();
-                player.openInventory(secondMenu);
-                page = 1;
-            } else if(slot<45){
-                session.getBoss().setEntityType(mobs.get(slot));
-                menu.close();
-                session.openMenu(new BossCreationMenu(player, session));
-            }
-        } else if(page==1) {
-            if(slot==46) {
-                secondMenu.close();
-                player.openInventory(menu);
-                page = 0;
-            } else if(slot<45){
-                session.getBoss().setEntityType(mobs.get(slot+45));
-                secondMenu.close();
-                session.openMenu(new BossCreationMenu(player, session));
-            }
+        if(!pageChangeClick(slot)) {
+            session.getBoss().setEntityType(mobs.get(slot+(currentPage*45)));
+            session.openLastMenu();
         }
     }
 }
