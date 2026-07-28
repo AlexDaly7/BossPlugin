@@ -49,6 +49,12 @@ public class MenuSession {
         currentMenu.openSelf();
     }
 
+    public void openLastMenu() {
+        currentMenu.close();
+        lastMenu.openSelf();
+        currentMenu = lastMenu;
+    }
+
     public void setBoss(CustomBoss boss) {
         this.boss = boss;
     }

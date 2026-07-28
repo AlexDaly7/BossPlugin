@@ -14,6 +14,7 @@ public class MenuClickListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         MenuSession session = MenuSession.getSession(player.getUniqueId());
         if(session!=null) {
+            event.setCancelled(true);
             session.getCurrentMenu().handleClick(event.getSlot());
         }
     }

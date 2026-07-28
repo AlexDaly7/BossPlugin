@@ -14,7 +14,6 @@ public class MenuCloseListener implements Listener {
         if(event.getReason()==InventoryCloseEvent.Reason.PLUGIN) return;
         UUID uuid = event.getPlayer().getUniqueId();
         MenuSession session = MenuSession.getSession(uuid);
-
         if(session!=null) {
             MenuSession.removeSession(uuid);
         }

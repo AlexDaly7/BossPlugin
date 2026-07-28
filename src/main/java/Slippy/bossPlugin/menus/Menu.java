@@ -11,6 +11,7 @@ public class Menu {
     protected MenuSession session;
     protected Inventory menu;
     protected Enum<?> currentInput;
+    protected String menuName = "Menu";
 
     public Menu(Player player, MenuSession session) {
         this.player = player;

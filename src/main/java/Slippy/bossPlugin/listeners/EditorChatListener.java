@@ -13,9 +13,6 @@ public class EditorChatListener implements Listener {
         UUID uuid = event.getPlayer().getUniqueId();
         MenuSession session = MenuSession.getSession(uuid);
 
-        if(session!=null) {
-            session.getCurrentMenu().handleTextInput(event.message().toString());
-        }
-
+        if(session!=null) session.getCurrentMenu().handleTextInput(event.message().toString());
     }
 }
