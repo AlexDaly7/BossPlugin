@@ -37,6 +37,13 @@ public class BossCreationMenu extends Menu {
                         List.of(Component.text("Click to set boss mob type"))
                 )
         );
+        menu.setItem(2,
+                MenuUtil.createButton(
+                        Material.BONE,
+                        Component.text("Manage Boss Phases"),
+                        List.of(Component.text("Click to open the bosses phase menu"))
+                )
+        );
 
         if(session.getBoss()==null) {
             session.setBoss(new CustomBoss(player.getWorld(), player.getLocation()));
@@ -53,6 +60,9 @@ public class BossCreationMenu extends Menu {
             }
             case 1 -> {
                 session.openMenu(new BossTypeMenu(player, session));
+            }
+            case 2 -> {
+                session.openMenu(new PhaseListMenu(player, session));
             }
         }
     }
