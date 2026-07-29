@@ -184,6 +184,10 @@ public class BaseBoss {
         this.phases = phases;
     }
 
+    public List<Phase> getPhases() {
+        return phases;
+    }
+
     public void setRespawnTimer(int respawnTimer) {
         this.respawnTimer = respawnTimer;
         maxRespawnTimer = respawnTimer;

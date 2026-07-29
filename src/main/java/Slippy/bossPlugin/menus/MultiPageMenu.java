@@ -26,29 +26,37 @@ public class MultiPageMenu extends Menu {
     }
 
     public void fillPages() {
-        int pageCount = (items.size() / 45);
-        for(int i=0;i<=pageCount;i++) {
-            Inventory inventory = Bukkit.createInventory(player, 54, menuName);
-            inventory.setItem(47,
-                    MenuUtil.createButton(
-                            Material.COMMAND_BLOCK,
-                            Component.text("Go back to previous page"),
-                            List.of(Component.text("Click to go back to previous page"))
-                    )
-            );
-            inventory.setItem(51,
-                    MenuUtil.createButton(
-                            Material.COMMAND_BLOCK,
-                            Component.text("Go forward to next page"),
-                            List.of(Component.text("Click to go forward to next page"))
-                    )
-            );
-            pages.add(inventory);
+        if(!items.isEmpty()) {
+            int pageCount = (items.size() / 45);
+            for (int i = 0; i <= pageCount; i++) {
+                addBlankPage();
+            }
+            for (int i = 0; i < items.size(); i++) {
+                int pageNumber = i / 45;
+                pages.get(pageNumber).setItem(i - (pageNumber * 45), items.get(i));
+            }
+        } else {
+            addBlankPage();
         }
-        for(int i=0;i<items.size();i++) {
-            int pageNumber = i / 45;
-            pages.get(pageNumber).setItem(i-(pageNumber*45), items.get(i));
-        }
+    }
+
+    public void addBlankPage() {
+        Inventory inventory = Bukkit.createInventory(player, 54, menuName);
+        inventory.setItem(47,
+            MenuUtil.createButton(
+                Material.COMMAND_BLOCK,
+                Component.text("Go back to previous page"),
+                List.of(Component.text("Click to go back to previous page"))
+            )
+        );
+        inventory.setItem(51,
+            MenuUtil.createButton(
+                Material.COMMAND_BLOCK,
+                Component.text("Go forward to next page"),
+                List.of(Component.text("Click to go forward to next page"))
+            )
+        );
+        pages.add(inventory);
     }
 
     public boolean pageChangeClick(int slot) {

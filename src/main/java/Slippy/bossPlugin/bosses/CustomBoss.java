@@ -61,4 +61,12 @@ public class CustomBoss extends BaseBoss {
     public void setEntityType(EntityType entityType) {
         this.entityType = entityType;
     }
+
+    public void addPhase(Phase phase) {
+        phases.add(phase);
+    }
+
+    public Phase getPhase(int i) {
+        return phases.get(i);
+    }
 }
