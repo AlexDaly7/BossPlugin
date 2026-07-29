@@ -34,8 +34,14 @@ public class Phase {
         this.maxSpecialCooldown = maxSpecialCooldown;
     }
 
+    public Phase() {}
+
     public double getMaxHealthRange() {
         return maxHealthRange;
+    }
+
+    public void setMaxHealthRange(int maxHealth) {
+        maxHealthRange = maxHealth;
     }
 
     public List<Ability> getBaseAbilities() {
