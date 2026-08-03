@@ -29,6 +29,13 @@ public class PhaseMenu extends Menu {
                 )
             )
         );
+        menu.setItem(1,
+                MenuUtil.createButton(
+                        Material.NETHER_STAR,
+                        Component.text("Open special abilities menu"),
+                        List.of(Component.text("Click to open special abilities menu"))
+                )
+        );
     }
 
     @Override
@@ -38,6 +45,11 @@ public class PhaseMenu extends Menu {
                 menu.close();
                 player.sendMessage("Enter the percentage of health for this phase to activate at. (100%=1.0/50%=0.5)");
                 currentInput = inputEnum.HEALTH;
+            }
+            case 1 -> {
+                AbilityListMenu abilityMenu = new AbilityListMenu(player, session);
+                abilityMenu.setAbilities(phase.getSpecialAbilities());
+                session.openMenu(abilityMenu);
             }
         }
     }

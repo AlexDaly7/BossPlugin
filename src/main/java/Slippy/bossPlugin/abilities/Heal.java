@@ -12,7 +12,7 @@ public class Heal extends Ability {
         super(data);
         name = "Heal";
         lore = "Heals the boss.";
-        displayItem = new ItemStack(Material.POTION);
+        displayItem = Material.POTION;
     }
 
     @Override

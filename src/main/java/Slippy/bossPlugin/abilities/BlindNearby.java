@@ -19,7 +19,7 @@ public class BlindNearby extends Ability {
         super(data);
         name = "Blind Nearby";
         lore = "Blinds nearby players momentarily.";
-        displayItem = new ItemStack(Material.POTION);
+        displayItem = Material.POTION;
     }
 
     @Override

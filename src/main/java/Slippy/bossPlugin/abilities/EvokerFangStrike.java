@@ -17,7 +17,7 @@ public class EvokerFangStrike extends Ability {
         super(data);
         name = "Evoker Fang Strike";
         lore = "A line of Evoker Fangs spring from the ground towards the nearest player.";
-        displayItem = new ItemStack(Material.TOTEM_OF_UNDYING);
+        displayItem = Material.TOTEM_OF_UNDYING;
     }
 
     @Override

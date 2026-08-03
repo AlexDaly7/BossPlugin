@@ -16,7 +16,7 @@ public class Explosion extends Ability {
         super(data);
         name = "Explosion";
         lore = "Players locations start to flash and explode.";
-        displayItem = new ItemStack(Material.TNT);
+        displayItem = Material.TNT;
     }
 
     public void activate(Mob mob) {

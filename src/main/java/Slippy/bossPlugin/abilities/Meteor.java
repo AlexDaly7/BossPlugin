@@ -20,7 +20,7 @@ public class Meteor extends Ability {
         super(data);
         name = "Meteor";
         lore = "Sends meteors from the sky at each player within range.";
-        displayItem = new ItemStack(Material.MAGMA_BLOCK);
+        displayItem = Material.MAGMA_BLOCK;
     }
 
     @Override

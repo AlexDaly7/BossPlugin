@@ -1,5 +1,6 @@
 package Slippy.bossPlugin.abilities;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Mob;
 import org.bukkit.inventory.ItemStack;
 
@@ -9,7 +10,7 @@ public class Ability {
     protected Map<String, Object> data;
     protected String name;
     protected String lore;
-    protected ItemStack displayItem;
+    protected Material displayItem;
 
     public Ability(Map<String, Object> data) {
         this.data = data;
@@ -25,5 +26,9 @@ public class Ability {
 
     public String getLore() {
         return lore;
+    }
+
+    public Material getItem() {
+        return displayItem;
     }
 }

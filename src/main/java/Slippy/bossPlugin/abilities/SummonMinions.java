@@ -17,7 +17,7 @@ public class SummonMinions extends Ability {
         super(data);
         name = "Summon Minions";
         lore = "Summons mobs of the same type around the boss.";
-        displayItem = new ItemStack(Material.POTION);
+        displayItem = Material.POTION;
     }
 
     @Override

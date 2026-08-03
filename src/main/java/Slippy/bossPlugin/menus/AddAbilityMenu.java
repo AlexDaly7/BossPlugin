@@ -1,0 +1,60 @@
+package Slippy.bossPlugin.menus;
+
+import Slippy.bossPlugin.abilities.Ability;
+import Slippy.bossPlugin.abilities.AbilityType;
+import Slippy.bossPlugin.util.MenuUtil;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class AddAbilityMenu extends MultiPageMenu {
+    private List<Ability> abilities = new ArrayList<Ability>();
+
+    public AddAbilityMenu(Player player, MenuSession session) {
+        super(player, session);
+
+        for(AbilityType ability : AbilityType.values()) {
+            abilities.add(
+                    ability.create(Map.of())
+            );
+        }
+        for(Ability ability : abilities) {
+            items.add(
+                MenuUtil.createButton(
+                    ability.getItem(),
+                    Component.text(ability.getName()),
+                    List.of(Component.text(ability.getLore()))
+                )
+            );
+        fillPages();
+
+            pages.forEach(inventory -> {
+                inventory.setItem(45,
+                        MenuUtil.createButton(
+                                Material.CRYING_OBSIDIAN,
+                                Component.text("Go back to previous menu"),
+                                List.of(Component.text("Click to go back to the previous menu"))
+                        )
+                );
+            });
+        }
+    }
+
+    @Override
+    public void handleClick(int slot) {
+        if(pageChangeClick(slot)) return;
+        if(slot<45) {
+            PhaseMenu phaseMenu = new PhaseMenu(player, session);
+            phaseMenu.setPhase(session.getBoss().getPhase(slot+(currentPage*45)));
+            session.openMenu(phaseMenu);
+        } else if(slot==48) {
+            session.openMenu(new AddAbilityMenu(player, session));
+        } else if(slot==45) {
+            session.openLastMenu();
+        }
+    }
+}
