@@ -24,7 +24,11 @@ public class AbilityListMenu extends MultiPageMenu {
     public void handleClick(int slot) {
         if(pageChangeClick(slot)) return;
         if(slot<45) {
-            
+            PhaseMenu phaseMenu = new PhaseMenu(player, session);
+            phaseMenu.setPhase(session.getBoss().getPhase(slot+(currentPage*45)));
+            session.openMenu(phaseMenu);
+        } else if(slot==48) {
+            session.openMenu(new AddAbilityMenu(player, session));
         } else if(slot==45) {
             session.openLastMenu();
         }

@@ -1,21 +1,20 @@
 package Slippy.bossPlugin.menus;
 
-import Slippy.bossPlugin.bosses.BaseBoss;
 import Slippy.bossPlugin.bosses.CustomBoss;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class MenuSession {
     public static Map<UUID, MenuSession> sessions = new HashMap<UUID, MenuSession>();
     private Menu currentMenu;
-    private Menu lastMenu;
     private CustomBoss boss;
+    private List<Menu> menuHistory = new ArrayList<>();
 
     public MenuSession(Player player) {
-        currentMenu = new MainMenu(player, this);
+        Menu mainMenu = new MainMenu(player, this);
+        currentMenu = mainMenu;
+        menuHistory.add(mainMenu);
     }
 
     public static void addSession(Player player) {
@@ -38,21 +37,18 @@ public class MenuSession {
         return currentMenu;
     }
 
-    public void setCurrentMenu(Menu menu) {
-        currentMenu = menu;
-    }
-
     public void openMenu(Menu nextMenu) {
         currentMenu.close();
-        lastMenu = currentMenu;
+        menuHistory.add(nextMenu);
         currentMenu = nextMenu;
         currentMenu.openSelf();
     }
 
     public void openLastMenu() {
         currentMenu.close();
-        lastMenu.openSelf();
-        currentMenu = lastMenu;
+        menuHistory.removeLast();
+        currentMenu = menuHistory.getLast();
+        currentMenu.openSelf();
     }
 
     public void setBoss(CustomBoss boss) {

@@ -19,6 +19,14 @@ public class PhaseMenu extends Menu {
         super(player, session);
         menu = Bukkit.createInventory(player, 36, "Phase Menu");
 
+        menu.setItem(27,
+                MenuUtil.createButton(
+                        Material.CRYING_OBSIDIAN,
+                        Component.text("Go back to previous menu"),
+                        List.of(Component.text("Click to go back to the previous menu"))
+                )
+        );
+
         menu.setItem(0,
             MenuUtil.createButton(
                 Material.REDSTONE_BLOCK,
@@ -36,11 +44,15 @@ public class PhaseMenu extends Menu {
                         List.of(Component.text("Click to open special abilities menu"))
                 )
         );
+
     }
 
     @Override
     public void handleClick(int slot) {
         switch(slot) {
+            case 27 -> {
+                session.openLastMenu();
+            }
             case 0 -> {
                 menu.close();
                 player.sendMessage("Enter the percentage of health for this phase to activate at. (100%=1.0/50%=0.5)");
