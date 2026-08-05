@@ -27,7 +27,7 @@ public class PhaseMenu extends Menu {
                 session.openLastMenu();
             }
             case 0 -> {
-                menu.close();
+                preTextInput();
                 player.sendMessage("Enter the percentage of health for this phase to activate at. (100%=1.0/50%=0.5)");
                 currentInput = inputEnum.HEALTH;
             }

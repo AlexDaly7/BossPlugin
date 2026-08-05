@@ -20,6 +20,11 @@ public class Menu {
 
     public void handleClick(int slot) {}
 
+    public void preTextInput() {
+        menu.close();
+        player.sendMessage("Type \"exit\" to go back to the menu");
+    }
+
     public void handleTextInput(String input) {}
 
     public void openSelf() {

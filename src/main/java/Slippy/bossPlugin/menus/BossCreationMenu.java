@@ -54,7 +54,7 @@ public class BossCreationMenu extends Menu {
     public void handleClick(int slot) {
         switch(slot) {
             case 0 -> {
-                menu.close();
+                preTextInput();
                 player.sendMessage("Please enter the name of the boss");
                 currentInput = inputEnum.NAME;
             }

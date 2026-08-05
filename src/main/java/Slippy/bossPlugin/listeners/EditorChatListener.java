@@ -13,7 +13,15 @@ public class EditorChatListener implements Listener {
     public void onChat(ChatEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
         MenuSession session = MenuSession.getSession(uuid);
-        String input = PlainTextComponentSerializer.plainText().serialize(event.message());
-        if(session!=null) session.getCurrentMenu().handleTextInput(input);
+
+        if(session!=null) {
+            String input = PlainTextComponentSerializer.plainText().serialize(event.message());
+            if(input.equalsIgnoreCase("exit")) {
+                session.openCurrentMenu();
+                return;
+            }
+            session.getCurrentMenu().handleTextInput(input);
+
+        }
     }
 }

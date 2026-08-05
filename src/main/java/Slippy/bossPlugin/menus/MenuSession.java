@@ -53,6 +53,10 @@ public class MenuSession {
         currentMenu.openSelf();
     }
 
+    public void openCurrentMenu() {
+        currentMenu.openSelf();
+    }
+
     public void setBoss(CustomBoss boss) {
         this.boss = boss;
     }
