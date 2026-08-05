@@ -102,6 +102,14 @@ public class Phase {
         }
     }
 
+    public void addBaseAbility(Ability ability) {
+        baseAbilities.add(ability);
+    }
+
+    public void addSpecialAbility(Ability ability) {
+        specialAbilities.add(ability);
+    }
+
     public void setMob(Mob mob) {
         this.mob = mob;
     }

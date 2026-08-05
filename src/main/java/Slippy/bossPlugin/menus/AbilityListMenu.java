@@ -28,7 +28,9 @@ public class AbilityListMenu extends MultiPageMenu {
             phaseMenu.setPhase(session.getBoss().getPhase(slot+(currentPage*45)));
             session.openMenu(phaseMenu);
         } else if(slot==48) {
-            session.openMenu(new AddAbilityMenu(player, session));
+            AddAbilityMenu addAbilityMenu = new AddAbilityMenu(player, session);
+            addAbilityMenu.setSpecialAbility();
+            session.openMenu(addAbilityMenu);
         } else if(slot==45) {
             session.openLastMenu();
         }
@@ -36,7 +38,10 @@ public class AbilityListMenu extends MultiPageMenu {
 
     @Override
     public void openSelf() {
+        abilities = session.getPhase().getSpecialAbilities();
+
         if(!abilities.isEmpty()) {
+            items.clear();
             abilities.forEach(ability -> {
                 items.add(
                         MenuUtil.createButton(
@@ -47,7 +52,6 @@ public class AbilityListMenu extends MultiPageMenu {
                 );
             });
         }
-        player.sendMessage(""+pages.size());
 
         fillPages();
 

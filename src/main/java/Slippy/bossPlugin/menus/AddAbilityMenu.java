@@ -13,6 +13,8 @@ import java.util.Map;
 
 public class AddAbilityMenu extends MultiPageMenu {
     private List<Ability> abilities = new ArrayList<Ability>();
+    // Tells the menu to submit ability to special or base abilities list
+    boolean isSpecialAbility = false;
 
     public AddAbilityMenu(Player player, MenuSession session) {
         super(player, session);
@@ -48,13 +50,23 @@ public class AddAbilityMenu extends MultiPageMenu {
     public void handleClick(int slot) {
         if(pageChangeClick(slot)) return;
         if(slot<45) {
-            PhaseMenu phaseMenu = new PhaseMenu(player, session);
-            phaseMenu.setPhase(session.getBoss().getPhase(slot+(currentPage*45)));
-            session.openMenu(phaseMenu);
+            if(slot+(currentPage*45)>abilities.size()-1) {
+                return;
+            }
+            if(isSpecialAbility) {
+                session.getPhase().addSpecialAbility(abilities.get(slot+(currentPage*45)));
+            } else {
+                session.getPhase().addBaseAbility(abilities.get(slot+(currentPage*45)));
+            }
+            session.openLastMenu();
         } else if(slot==48) {
             session.openMenu(new AddAbilityMenu(player, session));
         } else if(slot==45) {
             session.openLastMenu();
         }
+    }
+
+    public void setSpecialAbility() {
+        isSpecialAbility = true;
     }
 }
