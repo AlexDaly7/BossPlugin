@@ -40,7 +40,7 @@ public class Phase {
         return maxHealthRange;
     }
 
-    public void setMaxHealthRange(int maxHealth) {
+    public void setMaxHealthRange(double maxHealth) {
         maxHealthRange = maxHealth;
     }
 

@@ -19,6 +19,9 @@ public class PhaseListMenu extends MultiPageMenu {
     public void handleClick(int slot) {
         if(pageChangeClick(slot)) return;
         if(slot<45) {
+            if(slot+(currentPage*45)>session.getBoss().getPhases().size()-1) {
+                return;
+            }
             PhaseMenu phaseMenu = new PhaseMenu(player, session);
             session.setPhase(session.getBoss().getPhase(slot+(currentPage*45)));
             session.openMenu(phaseMenu);
@@ -40,6 +43,7 @@ public class PhaseListMenu extends MultiPageMenu {
 
         List<String> colours = List.of("RED", "BLUE", "GREEN", "CYAN", "PINK", "LIME", "MAGENTA", "YELLOW", "BROWN", "WHITE");
 
+        items.clear();
         phases.forEach((phase -> {
             Material wool = Material.getMaterial(colours.get(count)+"_WOOL");
             if(wool==null) wool = Material.GRAY_WOOL;
