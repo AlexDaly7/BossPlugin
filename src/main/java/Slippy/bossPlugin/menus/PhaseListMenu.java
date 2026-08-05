@@ -13,8 +13,29 @@ public class PhaseListMenu extends MultiPageMenu {
     public PhaseListMenu(Player player, MenuSession session) {
         super(player, session);
         menu = Bukkit.createInventory(player, 54);
-        List<Phase> phases = session.getBoss().getPhases();
+    }
 
+    @Override
+    public void handleClick(int slot) {
+        if(pageChangeClick(slot)) return;
+        if(slot<45) {
+            PhaseMenu phaseMenu = new PhaseMenu(player, session);
+            session.setPhase(session.getBoss().getPhase(slot+(currentPage*45)));
+            session.openMenu(phaseMenu);
+        } else if(slot==48) {
+            PhaseMenu phaseMenu = new PhaseMenu(player, session);
+            Phase phase = new Phase();
+            session.setPhase(phase);
+            session.getBoss().addPhase(phase);
+            session.openMenu(phaseMenu);
+        } else if(slot==45) {
+            session.openLastMenu();
+        }
+    }
+
+    @Override
+    public void openSelf() {
+        List<Phase> phases = session.getBoss().getPhases();
         int count = 0;
 
         List<String> colours = List.of("RED", "BLUE", "GREEN", "CYAN", "PINK", "LIME", "MAGENTA", "YELLOW", "BROWN", "WHITE");
@@ -24,11 +45,11 @@ public class PhaseListMenu extends MultiPageMenu {
             if(wool==null) wool = Material.GRAY_WOOL;
 
             items.add(
-                MenuUtil.createButton(
-                    wool,
-                    Component.text(""+phase.getMaxHealthRange()),
-                    List.of(Component.text("Click to manage phase "+phase.getMaxHealthRange()))
-                )
+                    MenuUtil.createButton(
+                            wool,
+                            Component.text(""+phase.getMaxHealthRange()),
+                            List.of(Component.text("Click to manage phase "+phase.getMaxHealthRange()))
+                    )
             );
         }));
 
@@ -36,11 +57,11 @@ public class PhaseListMenu extends MultiPageMenu {
 
         pages.forEach(inventory -> {
             inventory.setItem(48,
-                MenuUtil.createButton(
-                    Material.NETHER_STAR,
-                    Component.text("Create phase"),
-                    List.of(Component.text("Click to create a new phase"))
-                )
+                    MenuUtil.createButton(
+                            Material.NETHER_STAR,
+                            Component.text("Create phase"),
+                            List.of(Component.text("Click to create a new phase"))
+                    )
             );
             inventory.setItem(45,
                     MenuUtil.createButton(
@@ -50,21 +71,6 @@ public class PhaseListMenu extends MultiPageMenu {
                     )
             );
         });
-    }
-
-    @Override
-    public void handleClick(int slot) {
-        if(pageChangeClick(slot)) return;
-        if(slot<45) {
-            PhaseMenu phaseMenu = new PhaseMenu(player, session);
-            phaseMenu.setPhase(session.getBoss().getPhase(slot+(currentPage*45)));
-            session.openMenu(phaseMenu);
-        } else if(slot==48) {
-            PhaseMenu phaseMenu = new PhaseMenu(player, session);
-            phaseMenu.setPhase(new Phase());
-            session.openMenu(phaseMenu);
-        } else if(slot==45) {
-            session.openLastMenu();
-        }
+        player.openInventory(pages.getFirst());
     }
 }

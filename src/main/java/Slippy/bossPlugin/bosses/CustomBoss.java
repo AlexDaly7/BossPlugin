@@ -35,7 +35,6 @@ public class CustomBoss extends BaseBoss {
         mob = (Mob) world.spawnEntity(spawnLoc, entityType, CreatureSpawnEvent.SpawnReason.DEFAULT, entity -> {
             entity.setCustomName(name);
             entity.setCustomNameVisible(true);
-
         });
         mob.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
         mob.setHealth(maxHealth);

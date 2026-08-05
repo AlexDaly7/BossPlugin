@@ -44,7 +44,6 @@ public class PhaseMenu extends Menu {
                         List.of(Component.text("Click to open special abilities menu"))
                 )
         );
-
     }
 
     @Override
@@ -60,7 +59,7 @@ public class PhaseMenu extends Menu {
             }
             case 1 -> {
                 AbilityListMenu abilityMenu = new AbilityListMenu(player, session);
-                abilityMenu.setAbilities(phase.getSpecialAbilities());
+                abilityMenu.setAbilities(session.getPhase().getSpecialAbilities());
                 session.openMenu(abilityMenu);
             }
         }
