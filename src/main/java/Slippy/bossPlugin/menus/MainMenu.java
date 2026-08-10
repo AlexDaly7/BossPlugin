@@ -40,7 +40,9 @@ public class MainMenu extends Menu {
                 session.openMenu(new BossListMenu(player, session));
             }
             case 9 -> {
-                session.openMenu(new BossCreationMenu(player, session));
+                BossCreationMenu bossCreationMenu = new BossCreationMenu(player, session);
+                bossCreationMenu.setBossNew();
+                session.openMenu(bossCreationMenu);
             }
         }
     }

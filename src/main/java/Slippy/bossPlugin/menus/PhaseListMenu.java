@@ -19,12 +19,11 @@ public class PhaseListMenu extends MultiPageMenu {
     public void handleClick(int slot) {
         if(pageChangeClick(slot)) return;
         if(slot<45) {
-            if(slot+(currentPage*45)>session.getBoss().getPhases().size()-1) {
-                return;
+            if(slot+(currentPage*45)<session.getBoss().getPhases().size()) {
+                PhaseMenu phaseMenu = new PhaseMenu(player, session);
+                session.setPhase(session.getBoss().getPhase(slot+(currentPage*45)));
+                session.openMenu(phaseMenu);
             }
-            PhaseMenu phaseMenu = new PhaseMenu(player, session);
-            session.setPhase(session.getBoss().getPhase(slot+(currentPage*45)));
-            session.openMenu(phaseMenu);
         } else if(slot==48) {
             PhaseMenu phaseMenu = new PhaseMenu(player, session);
             Phase phase = new Phase();

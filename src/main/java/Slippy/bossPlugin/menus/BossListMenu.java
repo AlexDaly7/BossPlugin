@@ -2,34 +2,65 @@ package Slippy.bossPlugin.menus;
 
 import Slippy.bossPlugin.bosses.BaseBoss;
 import Slippy.bossPlugin.bosses.BossManager;
+import Slippy.bossPlugin.bosses.CustomBoss;
 import Slippy.bossPlugin.util.MenuUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import java.util.List;
 
-public class BossListMenu extends Menu {
+public class BossListMenu extends MultiPageMenu {
     List<BaseBoss> bosses;
 
     public BossListMenu(Player player, MenuSession session) {
         super(player, session);
-        bosses = BossManager.getBosses();
-        menu = Bukkit.createInventory(player, 45, "Boss List");
-        for(int i=0;i<bosses.size();i++){
-            menu.setItem(i,
-                    MenuUtil.createButton(
-                            Material.SPAWNER,
-                            Component.text(bosses.get(i).getName()),
-                            List.of(Component.text("Cool boss"))
-                    )
-            );
-        }
+        // TOFIX: cannot recreate issue, but boss mob was deleted after fiddling around in this menu
     }
 
     @Override
     public void handleClick(int slot) {
+        if(pageChangeClick(slot)) return;
+        if(slot<45) {
+            if (slot+(currentPage*45)<bosses.size()) {
+                session.setBoss((CustomBoss) bosses.get(slot + (currentPage * 45)));
+                session.openMenu(new BossCreationMenu(player, session));
+            }
+        }
+        switch(slot) {
+            case 45 -> {
+                session.openLastMenu();
+            }
+        }
+    }
 
+    @Override
+    public void openSelf() {
+        bosses = BossManager.getBosses();
+        for(BaseBoss boss : bosses) {
+            items.add(
+                    MenuUtil.createButton(
+                            Material.SPAWNER,
+                            Component.text(boss.getName()),
+                            List.of(Component.text("Placeholder"))
+                    )
+            );
+        }
+
+        fillPages();
+
+        for(Inventory inventory : pages) {
+            inventory.setItem(45,
+                    MenuUtil.createButton(
+                            Material.CRYING_OBSIDIAN,
+                            Component.text("Go back to previous menu"),
+                            List.of(Component.text("Click to go back to the previous menu"))
+                    )
+            );
+        }
+
+        player.openInventory(pages.getFirst());
     }
 }
