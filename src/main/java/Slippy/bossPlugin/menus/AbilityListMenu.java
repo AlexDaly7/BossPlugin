@@ -14,6 +14,7 @@ import java.util.List;
 
 public class AbilityListMenu extends MultiPageMenu {
     private List<Ability> abilities;
+    boolean isSpecial = false;
 
     public AbilityListMenu(Player player, MenuSession session) {
         super(player, session);
@@ -32,7 +33,9 @@ public class AbilityListMenu extends MultiPageMenu {
             //session.openMenu(abilityMenu);
         } else if(slot==48) {
             AddAbilityMenu addAbilityMenu = new AddAbilityMenu(player, session);
-            addAbilityMenu.setSpecialAbility();
+            if(isSpecial) {
+                addAbilityMenu.setSpecialAbility();
+            }
             session.openMenu(addAbilityMenu);
         } else if(slot==45) {
             session.openLastMenu();
@@ -41,7 +44,11 @@ public class AbilityListMenu extends MultiPageMenu {
 
     @Override
     public void openSelf() {
-        abilities = session.getPhase().getSpecialAbilities();
+        if(isSpecial) {
+            abilities = session.getPhase().getSpecialAbilities();
+        } else {
+            abilities = session.getPhase().getBaseAbilities();
+        }
 
         if(!abilities.isEmpty()) {
             items.clear();
@@ -78,7 +85,7 @@ public class AbilityListMenu extends MultiPageMenu {
         player.openInventory(pages.getFirst());
     }
 
-    public void setAbilities(List<Ability> abilities) {
-        this.abilities = abilities;
+    public void setSpecial() {
+        isSpecial = true;
     }
 }

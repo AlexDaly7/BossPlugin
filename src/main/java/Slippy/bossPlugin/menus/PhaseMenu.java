@@ -1,9 +1,7 @@
 package Slippy.bossPlugin.menus;
 
-import Slippy.bossPlugin.bosses.Phase;
 import Slippy.bossPlugin.util.MenuUtil;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -33,7 +31,11 @@ public class PhaseMenu extends Menu {
             }
             case 1 -> {
                 AbilityListMenu abilityMenu = new AbilityListMenu(player, session);
-                abilityMenu.setAbilities(session.getPhase().getSpecialAbilities());
+                abilityMenu.setSpecial();
+                session.openMenu(abilityMenu);
+            }
+            case 2 -> {
+                AbilityListMenu abilityMenu = new AbilityListMenu(player, session);
                 session.openMenu(abilityMenu);
             }
         }
@@ -89,6 +91,13 @@ public class PhaseMenu extends Menu {
                 Component.text("Open special abilities menu"),
                 List.of(Component.text("Click to open special abilities menu"))
             )
+        );
+        menu.setItem(2,
+                MenuUtil.createButton(
+                        Material.NETHER_STAR,
+                        Component.text("Open base abilities menu"),
+                        List.of(Component.text("Click to open base abilities menu"))
+                )
         );
 
         player.openInventory(menu);
