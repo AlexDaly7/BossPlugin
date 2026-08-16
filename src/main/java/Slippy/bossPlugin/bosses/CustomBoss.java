@@ -68,4 +68,20 @@ public class CustomBoss extends BaseBoss {
     public Phase getPhase(int i) {
         return phases.get(i);
     }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public Location getSpawnLoc() {
+        return spawnLoc;
+    }
+
+    public void setSpawnLoc(Location spawnLoc) {
+        this.spawnLoc = spawnLoc;
+    }
 }

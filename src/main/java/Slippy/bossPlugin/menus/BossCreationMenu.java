@@ -1,13 +1,13 @@
 package Slippy.bossPlugin.menus;
 
-import Slippy.bossPlugin.bosses.BaseBoss;
 import Slippy.bossPlugin.bosses.BossManager;
 import Slippy.bossPlugin.bosses.CustomBoss;
 import Slippy.bossPlugin.util.MenuUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -20,6 +20,10 @@ public class BossCreationMenu extends Menu {
 
     public BossCreationMenu(Player player, MenuSession session) {
         super(player, session);
+
+        if(session.getBoss()==null) {
+            session.setBoss(new CustomBoss(player.getWorld(), player.getLocation()));
+        }
 
         menu = Bukkit.createInventory(player, 45, "Boss Creation");
         menu.setItem(0,
@@ -50,10 +54,18 @@ public class BossCreationMenu extends Menu {
                         List.of(Component.text("Save current changes and return to previous menu"))
                 )
         );
-
-        if(session.getBoss()==null) {
-            session.setBoss(new CustomBoss(player.getWorld(), player.getLocation()));
-        }
+        Location loc = session.getBoss().getSpawnLoc();
+        menu.setItem(3,
+            MenuUtil.createButton(
+                Material.COMMAND_BLOCK,
+                Component.text("Boss co-ordinate menu"),
+                List.of(
+                    Component.text("X: "+(int)loc.getX()),
+                    Component.text("Y: "+(int)loc.getY()),
+                    Component.text("Z: "+(int)loc.getZ())
+                )
+            )
+        );
     }
 
     @Override
@@ -70,8 +82,12 @@ public class BossCreationMenu extends Menu {
             case 2 -> {
                 session.openMenu(new PhaseListMenu(player, session));
             }
+            case 3 -> {
+                session.openMenu(new LocationMenu(player, session));
+            }
             case 43 -> {
                 BossManager.add(session.getBoss());
+                session.openLastMenu();
             }
         }
     }

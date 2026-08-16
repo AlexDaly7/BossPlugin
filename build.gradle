@@ -16,7 +16,7 @@ repositories {
 
 // The three lines below builds the plugin directly to the specified file path for easy testing.
 jar {
-    destinationDirectory = file("C:\\Users\\alexs\\Documents\\PluginTestServer\\plugins")
+    destinationDirectory = file("C:\\Users\\DELL\\Documents\\Plugins\\Testing Server\\plugins")
 }
 
 dependencies {
