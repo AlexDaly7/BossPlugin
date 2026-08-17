@@ -28,7 +28,7 @@ public class BaseBoss {
     protected Location spawnLoc;
 
     protected int maxHealth;
-    protected int damage;
+    protected Integer id = -1;
     protected String name;
     protected int maxRespawnTimer = 500;
     protected int respawnTimer = 500;
@@ -131,7 +131,7 @@ public class BaseBoss {
     }
 
     public void tickBossBar() {
-        ArrayList<Player> players = new ArrayList<Player>(mob.getLocation().getNearbyPlayers(100));
+        ArrayList<Player> players = new ArrayList<>(mob.getLocation().getNearbyPlayers(100));
         if(!players.isEmpty()) {
             // Add nearby players so they can see the boss bar
             for(Player player : players) {
@@ -203,5 +203,13 @@ public class BaseBoss {
 
     public Location getLocation() {
         return mob.getLocation();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

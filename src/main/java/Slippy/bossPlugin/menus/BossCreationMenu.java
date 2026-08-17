@@ -1,5 +1,6 @@
 package Slippy.bossPlugin.menus;
 
+import Slippy.bossPlugin.bosses.BaseBoss;
 import Slippy.bossPlugin.bosses.BossManager;
 import Slippy.bossPlugin.bosses.CustomBoss;
 import Slippy.bossPlugin.util.MenuUtil;
@@ -8,11 +9,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-
 import java.util.List;
 
 public class BossCreationMenu extends Menu {
-    boolean isBossNew = false;
     private enum inputEnum {
         NAME,
         MOB_TYPE
@@ -21,51 +20,7 @@ public class BossCreationMenu extends Menu {
     public BossCreationMenu(Player player, MenuSession session) {
         super(player, session);
 
-        if(session.getBoss()==null) {
-            session.setBoss(new CustomBoss(player.getWorld(), player.getLocation()));
-        }
-
         menu = Bukkit.createInventory(player, 45, "Boss Creation");
-        menu.setItem(0,
-                MenuUtil.createButton(
-                        Material.SPAWNER,
-                        Component.text("Set boss name"),
-                        List.of(Component.text("Click to set boss name"))
-                )
-        );
-        menu.setItem(1,
-                MenuUtil.createButton(
-                        Material.CREEPER_HEAD,
-                        Component.text("Set boss mob type"),
-                        List.of(Component.text("Click to set boss mob type"))
-                )
-        );
-        menu.setItem(2,
-            MenuUtil.createButton(
-                Material.BONE,
-                Component.text("Manage Boss Phases"),
-                List.of(Component.text("Click to open the bosses phase menu"))
-            )
-        );
-        menu.setItem(43,
-                MenuUtil.createButton(
-                        Material.ENDER_EYE,
-                        Component.text("Save Changes"),
-                        List.of(Component.text("Save current changes and return to previous menu"))
-                )
-        );
-        Location loc = session.getBoss().getSpawnLoc();
-        menu.setItem(3,
-            MenuUtil.createButton(
-                Material.COMMAND_BLOCK,
-                Component.text("Boss co-ordinate menu"),
-                List.of(
-                    Component.text("X: "+(int)loc.getX()),
-                    Component.text("Y: "+(int)loc.getY()),
-                    Component.text("Z: "+(int)loc.getZ())
-                )
-            )
-        );
     }
 
     @Override
@@ -86,7 +41,21 @@ public class BossCreationMenu extends Menu {
                 session.openMenu(new LocationMenu(player, session));
             }
             case 43 -> {
-                BossManager.add(session.getBoss());
+                // If boss has no id, set id and add to bosses. Otherwise, replace old boss object with updated one.
+                List<BaseBoss> bosses = BossManager.getBosses();
+                if(session.getBoss().getId()==null) {
+                    session.getBoss().setId(bosses.size());
+                    player.sendMessage("ID: "+session.getBoss().getId());
+                    BossManager.add(session.getBoss());
+                } else {
+                    for(int i=0;i<bosses.size();i++) {
+                        player.sendMessage(bosses.get(i).getId().toString());
+                        if(bosses.get(i).getId()==session.getBoss().getId()) {
+                            bosses.remove(i);
+                            bosses.add(i, session.getBoss());
+                        }
+                    }
+                }
                 session.openLastMenu();
             }
         }
@@ -103,7 +72,49 @@ public class BossCreationMenu extends Menu {
 
     }
 
-    public void setBossNew() {
-        isBossNew = true;
+    @Override
+    public void openSelf() {
+        menu.setItem(0,
+            MenuUtil.createButton(
+                Material.SPAWNER,
+                Component.text("Set boss name"),
+                List.of(Component.text("Click to set boss name"))
+            )
+        );
+        menu.setItem(1,
+            MenuUtil.createButton(
+                Material.CREEPER_HEAD,
+                Component.text("Set boss mob type"),
+                List.of(Component.text("Click to set boss mob type"))
+            )
+        );
+        menu.setItem(2,
+            MenuUtil.createButton(
+                Material.BONE,
+                Component.text("Manage Boss Phases"),
+                List.of(Component.text("Click to open the bosses phase menu"))
+            )
+        );
+        menu.setItem(43,
+            MenuUtil.createButton(
+                Material.ENDER_EYE,
+                Component.text("Save Changes"),
+                List.of(Component.text("Save current changes and return to previous menu"))
+            )
+        );
+        Location loc = session.getBoss().getSpawnLoc();
+        menu.setItem(3,
+            MenuUtil.createButton(
+                Material.COMMAND_BLOCK,
+                Component.text("Boss co-ordinate menu"),
+                List.of(
+                    Component.text("X: "+(int)loc.getX()),
+                    Component.text("Y: "+(int)loc.getY()),
+                    Component.text("Z: "+(int)loc.getZ())
+                )
+            )
+        );
+        player.openInventory(menu);
     }
+
 }

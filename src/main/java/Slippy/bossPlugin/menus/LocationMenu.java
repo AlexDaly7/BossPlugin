@@ -112,6 +112,5 @@ public class LocationMenu extends Menu {
         } catch(NumberFormatException e) {
             player.sendMessage("That is an invalid number.");
         }
-
     }
 }

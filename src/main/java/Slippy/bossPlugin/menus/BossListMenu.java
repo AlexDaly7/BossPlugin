@@ -38,6 +38,7 @@ public class BossListMenu extends MultiPageMenu {
 
     @Override
     public void openSelf() {
+        items.clear();
         bosses = BossManager.getBosses();
         for(BaseBoss boss : bosses) {
             items.add(
