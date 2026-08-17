@@ -16,6 +16,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,9 @@ public class ConfigUtil {
         // TODO: proper feedback using Bukkit.broadcastMessage() to inform user of yml mistakes
 
         ArrayList<BaseBoss> bosses = new ArrayList<BaseBoss>();
+        // A second array is used to store bosses without an id until one can be given to them.
+        ArrayList<BaseBoss> idBosses = new ArrayList<>();
+
         List bossList = fileConfig.getList("bosses");
         if(bossList!=null) {
             plugin.getLogger().info("Bosses detected");
@@ -116,10 +120,39 @@ public class ConfigUtil {
                     } else {
                         plugin.getLogger().info("No attributes loaded for "+name);
                     }
-                    bosses.add(boss);
+
+                    if(!bossData.containsKey("id")) {
+                        idBosses.add(boss);
+                    } else {
+                        try {
+                            boss.setId((int) bossData.get("id"));
+                            bosses.add(boss);
+                        } catch(NumberFormatException e) {
+                            plugin.getLogger().warning("Id for "+boss.getName()+" is invalid. Assigning automatic id.");
+                            idBosses.add(boss);
+                        }
+                    }
 
                 } else {
                     plugin.getLogger().info(worldString+" is not a valid world.");
+                }
+            }
+            if(!idBosses.isEmpty()) {
+                for (BaseBoss idBoss : idBosses) {
+                    idBoss.setId(bosses.size());
+                    bosses.add(idBoss);
+                    for(Object bossEntry : bossList) {
+                        Map<String, Object> boss = (Map<String, Object>) bossEntry;
+                        if(idBoss.getName()==boss.get("name")) {
+                            boss.put("id", idBoss.getId());
+                        }
+                    }
+                }
+                fileConfig.set("bosses", bossList);
+                try {
+                    fileConfig.save(file);
+                } catch(IOException e) {
+                    plugin.getLogger().warning(e.toString());
                 }
 
             }
