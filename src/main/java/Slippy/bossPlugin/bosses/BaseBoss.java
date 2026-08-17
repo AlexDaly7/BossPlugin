@@ -28,7 +28,7 @@ public class BaseBoss {
     protected Location spawnLoc;
 
     protected int maxHealth;
-    protected Integer id = -1;
+    protected Integer id;
     protected String name;
     protected int maxRespawnTimer = 500;
     protected int respawnTimer = 500;
@@ -161,7 +161,9 @@ public class BaseBoss {
     }
 
     public void removeBossBar() {
-        bossBar.removeAll();
+        if(bossBar!=null) {
+            bossBar.removeAll();
+        }
     }
 
     public boolean isBossDead() {

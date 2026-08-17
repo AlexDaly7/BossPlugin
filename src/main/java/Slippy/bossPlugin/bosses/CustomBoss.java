@@ -48,9 +48,11 @@ public class CustomBoss extends BaseBoss {
     }
 
     public void applyAttributes() {
-        attributes.forEach(entry -> {
-            mob.getAttribute((Attribute) entry.get("attribute")).setBaseValue(((Number) entry.get("value")).doubleValue());
-        });
+        if (attributes!=null) {
+            attributes.forEach(entry -> {
+                mob.getAttribute((Attribute) entry.get("attribute")).setBaseValue(((Number) entry.get("value")).doubleValue());
+            });
+        }
     }
 
     public EntityType getEntityType() {

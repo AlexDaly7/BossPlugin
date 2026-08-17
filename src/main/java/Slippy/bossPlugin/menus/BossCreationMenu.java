@@ -42,20 +42,30 @@ public class BossCreationMenu extends Menu {
             }
             case 43 -> {
                 // If boss has no id, set id and add to bosses. Otherwise, replace old boss object with updated one.
+
+                // A check should be run here to either inform the player of missing required fields for the boss
+                // or to fill in those missing fields with default values
+
                 List<BaseBoss> bosses = BossManager.getBosses();
                 if(session.getBoss().getId()==null) {
                     session.getBoss().setId(bosses.size());
                     player.sendMessage("ID: "+session.getBoss().getId());
+                    session.getBoss().spawnBoss();
                     BossManager.add(session.getBoss());
                 } else {
                     for(int i=0;i<bosses.size();i++) {
                         player.sendMessage(bosses.get(i).getId().toString());
                         if(bosses.get(i).getId()==session.getBoss().getId()) {
+                            bosses.get(i).despawnBoss();
                             bosses.remove(i);
+                            session.getBoss().spawnBoss();
                             bosses.add(i, session.getBoss());
                         }
                     }
                 }
+
+
+
                 session.openLastMenu();
             }
         }
