@@ -143,7 +143,7 @@ public class ConfigUtil {
                     bosses.add(idBoss);
                     for(Object bossEntry : bossList) {
                         Map<String, Object> boss = (Map<String, Object>) bossEntry;
-                        if(idBoss.getName()==boss.get("name")) {
+                        if(idBoss.getName().equals(boss.get("name"))) {
                             boss.put("id", idBoss.getId());
                         }
                     }

@@ -14,7 +14,8 @@ import java.util.List;
 public class BossCreationMenu extends Menu {
     private enum inputEnum {
         NAME,
-        MOB_TYPE
+        HEALTH,
+        RESPAWN
     }
 
     public BossCreationMenu(Player player, MenuSession session) {
@@ -39,6 +40,16 @@ public class BossCreationMenu extends Menu {
             }
             case 3 -> {
                 session.openMenu(new LocationMenu(player, session));
+            }
+            case 4 -> {
+                preTextInput();
+                player.sendMessage("Please enter the bosses max health");
+                currentInput = inputEnum.HEALTH;
+            }
+            case 5 -> {
+                preTextInput();
+                player.sendMessage("Please enter the respawn time of the boss (in seconds)");
+                currentInput = inputEnum.RESPAWN;
             }
             case 43 -> {
                 // If boss has no id, set id and add to bosses. Otherwise, replace old boss object with updated one.
@@ -77,6 +88,26 @@ public class BossCreationMenu extends Menu {
             case NAME -> {
                 session.getBoss().setName(input);
                 openSelf();
+            }
+            case HEALTH -> {
+                int healthIn;
+                try {
+                    healthIn = Integer.parseInt(input);
+                    session.getBoss().setHealth(healthIn);
+                    openSelf();
+                } catch (NumberFormatException e) {
+                    player.sendMessage(input+" is not a valid number, please try again.");
+                }
+            }
+            case RESPAWN -> {
+                int respawnIn;
+                try {
+                    respawnIn = Integer.parseInt(input);
+                    session.getBoss().setRespawnTimer(respawnIn);
+                    openSelf();
+                } catch (NumberFormatException e) {
+                    player.sendMessage(input+" is not a valid number, please try again.");
+                }
             }
         }
 
@@ -121,6 +152,26 @@ public class BossCreationMenu extends Menu {
                     Component.text("X: "+(int)loc.getX()),
                     Component.text("Y: "+(int)loc.getY()),
                     Component.text("Z: "+(int)loc.getZ())
+                )
+            )
+        );
+        menu.setItem(4,
+            MenuUtil.createButton(
+                Material.COOKED_BEEF,
+                Component.text("Set boss health"),
+                List.of(
+                    Component.text("Health: "+session.getBoss().getHealth()),
+                    Component.text("Click to change boss max health.")
+                )
+            )
+        );
+        menu.setItem(5,
+            MenuUtil.createButton(
+                Material.CLOCK,
+                Component.text("Set respawn time"),
+                List.of(
+                    Component.text("Respawn time: "+session.getBoss().getRespawnTimer()),
+                    Component.text("Click to change boss respawn time.")
                 )
             )
         );

@@ -182,6 +182,10 @@ public class BaseBoss {
         maxHealth = health;
     }
 
+    public int getHealth() {
+        return maxHealth;
+    }
+
     public void setPhases(List<Phase> phases) {
         this.phases = phases;
     }
@@ -193,6 +197,10 @@ public class BaseBoss {
     public void setRespawnTimer(int respawnTimer) {
         this.respawnTimer = respawnTimer;
         maxRespawnTimer = respawnTimer;
+    }
+
+    public int getRespawnTimer() {
+        return respawnTimer;
     }
 
     public void setLootList(List lootList) {
