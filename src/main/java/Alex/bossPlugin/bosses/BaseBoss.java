@@ -1,0 +1,222 @@
+package Alex.bossPlugin.bosses;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import Alex.bossPlugin.BossPlugin;
+import Alex.bossPlugin.util.TaskUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Mob;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+
+public class BaseBoss {
+    // Base boss class, contains methods to tick abilities.
+
+    // Important reference variables
+    protected World world;
+    protected Mob mob;
+    protected Location spawnLoc;
+
+    protected int maxHealth;
+    protected Integer id;
+    protected String name;
+    protected int maxRespawnTimer = 500;
+    protected int respawnTimer = 500;
+
+    // Ability variables
+    protected int baseCooldown = 10;
+    protected int specialCooldown = 20;
+
+    // Phase variables
+    protected List<Phase> phases = new ArrayList<Phase>();
+    protected Phase activePhase;
+    protected Phase startingPhase;
+
+    //LootList items
+    private List<Map<String, Object>> lootList;
+
+    // Boss bar
+    protected BossBar bossBar;
+
+    public BaseBoss(World world, Location loc) {
+        this.world = world;
+        this.spawnLoc = loc;
+    }
+
+    public BaseBoss() {}
+
+    public void spawnBoss() {}
+
+    public void despawnBoss() {
+        mob.remove();
+    }
+
+    public void tickAbilities() {
+        // Ensure abilities don't work if mob is not spawned or is dead.
+        if(mob==null||mob.isDead()) return;
+        if(activePhase==null) return;
+
+        if(!activePhase.getSpecialAbilities().isEmpty()&&activePhase.getMaxSpecialCooldown()!=0) {
+            specialCooldown--;
+            if(specialCooldown<=0) {
+                specialCooldown = activePhase.getMaxSpecialCooldown();
+                activePhase.getRanSpecialAbility().activate(mob);
+                return;
+            }
+        }
+        // Special ability should run over base ability and so skips a tick for base cooldown if called.
+        // This gives the player an extra second before a base ability after a special ability, which is beneficial.
+        if(!activePhase.getBaseAbilities().isEmpty()&&activePhase.getMaxBaseCooldown()!=0) {
+            baseCooldown--;
+            if (baseCooldown<=0) {
+                baseCooldown = activePhase.getMaxBaseCooldown();
+                activePhase.getRanBaseAbility().activate(mob);
+            }
+        }
+    }
+
+    public void createBossBar() {
+        if(name!=null) {
+            bossBar = Bukkit.createBossBar(name, BarColor.BLUE, BarStyle.SEGMENTED_6);
+        }
+    }
+
+    public void tickPhase() {
+        if(!phases.isEmpty()) {
+            if(mob.getHealth()!=maxHealth) {
+                Phase currentPhase = phases.getFirst();
+                double currentHealth = mob.getHealth() / maxHealth;
+                for (Phase phase : phases) {
+                    if (currentPhase.getMaxHealthRange() > phase.getMaxHealthRange() && phase.getMaxHealthRange() >= currentHealth) {
+                        currentPhase = phase;
+                    }
+                }
+                if (activePhase != currentPhase) {
+                    activePhase = currentPhase;
+                    mob.setNoDamageTicks((int) activePhase.getTransitionTime()*20);
+                    BossPlugin.getPlugin().getLogger().info("Invulnerablility: "+mob.isInvulnerable());
+                    TaskUtil.runTimedTask(() -> {
+                        world.spawnParticle(activePhase.getParticle(),
+                                mob.getX(),
+                                mob.getY(),
+                                mob.getZ(),
+                                30,
+                                2, 2, 2
+                        );
+
+                    }, 0, 2, (int) activePhase.getTransitionTime()*10);
+                }
+            } else {
+                if(startingPhase==null) {
+                    for(Phase phase : phases) {
+                        if(phase.getMaxHealthRange()==1) {
+                            startingPhase = phase;
+                            activePhase = phase;
+                        }
+                    }
+                }
+            }
+            activePhase.activateEffects(mob);
+        }
+    }
+
+    public void tickBossBar() {
+        ArrayList<Player> players = new ArrayList<>(mob.getLocation().getNearbyPlayers(100));
+        if(!players.isEmpty()) {
+            // Add nearby players so they can see the boss bar
+            for(Player player : players) {
+                if(!bossBar.getPlayers().contains(player)) {
+                    bossBar.addPlayer(player);
+                }
+            }
+        }
+        // Remove players who are no longer nearby
+        if(!bossBar.getPlayers().isEmpty()) {
+            for (Player player : bossBar.getPlayers()) {
+                if (!players.contains(player)) {
+                    bossBar.removePlayer(player);
+                }
+            }
+            double percentage = mob.getHealth() / mob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+            bossBar.setProgress(percentage);
+        }
+    }
+
+    public void tickRespawn() {
+        respawnTimer--;
+        if(respawnTimer<=0) {
+            spawnBoss();
+            respawnTimer=maxRespawnTimer;
+        }
+    }
+
+    public void removeBossBar() {
+        if(bossBar!=null) {
+            bossBar.removeAll();
+        }
+    }
+
+    public boolean isBossDead() {
+        return mob.isDead();
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setHealth(int health) {
+        maxHealth = health;
+    }
+
+    public int getHealth() {
+        return maxHealth;
+    }
+
+    public void setPhases(List<Phase> phases) {
+        this.phases = phases;
+    }
+
+    public List<Phase> getPhases() {
+        return phases;
+    }
+
+    public void setRespawnTimer(int respawnTimer) {
+        this.respawnTimer = respawnTimer;
+        maxRespawnTimer = respawnTimer;
+    }
+
+    public int getRespawnTimer() {
+        return respawnTimer;
+    }
+
+    public void setLootList(List lootList) {
+        this.lootList = lootList;
+    }
+
+    public List getLootList() {
+        return lootList;
+    }
+
+    public Location getLocation() {
+        return mob.getLocation();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+}

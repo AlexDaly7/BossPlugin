@@ -1,6 +1,6 @@
 name: BossPlugin
 version: 'DEV'
-main: Slippy.bossPlugin.BossPlugin
+main: Alex.bossPlugin.BossPlugin
 api-version: '1.21'
 authors: [ Alex ]
 description: Custom YML configured bosses for paper 1.21.1 servers.
