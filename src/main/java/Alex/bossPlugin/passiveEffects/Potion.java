@@ -27,7 +27,7 @@ public class Potion extends PassiveEffect {
                 try {
                     potionEffect = PotionEffectType.getByName((String) data.get("potion")).createEffect(80, amplifier);
                 } catch (IllegalArgumentException e) {
-                    BossPlugin.getPlugin().getLogger().warning("Particle " + (String) data.get("particle") + " is not a valid particle.");
+                    BossPlugin.getPlugin().getLogger().warning("Potion " + (String) data.get("potion") + " is not a valid potion.");
                     return;
                 }
             } else {
