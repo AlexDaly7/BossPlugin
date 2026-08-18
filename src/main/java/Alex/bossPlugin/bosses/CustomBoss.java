@@ -73,12 +73,4 @@ public class CustomBoss extends BaseBoss {
     public World getWorld() {
         return world;
     }
-
-    public Location getSpawnLoc() {
-        return spawnLoc;
-    }
-
-    public void setSpawnLoc(Location spawnLoc) {
-        this.spawnLoc = spawnLoc;
-    }
 }

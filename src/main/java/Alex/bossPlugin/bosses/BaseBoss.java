@@ -212,6 +212,14 @@ public class BaseBoss {
         return mob.getLocation();
     }
 
+    public Location getSpawnLoc() {
+        return spawnLoc;
+    }
+
+    public void setSpawnLoc(Location spawnLoc) {
+        this.spawnLoc = spawnLoc;
+    }
+
     public Integer getId() {
         return id;
     }
