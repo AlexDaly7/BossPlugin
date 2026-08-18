@@ -2,7 +2,7 @@ package Alex.bossPlugin.commands;
 
 import Alex.bossPlugin.bosses.BossManager;
 import Alex.bossPlugin.menus.MenuSession;
-import Alex.bossPlugin.util.ConfigUtil;
+import Alex.bossPlugin.config.ConfigUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

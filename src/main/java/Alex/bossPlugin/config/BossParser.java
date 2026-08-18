@@ -1,4 +1,4 @@
-package Alex.bossPlugin.util;
+package Alex.bossPlugin.config;
 
 import Alex.bossPlugin.BossPlugin;
 import Alex.bossPlugin.abilities.Ability;
@@ -10,156 +10,122 @@ import Alex.bossPlugin.passiveEffects.PassiveEffect;
 import Alex.bossPlugin.passiveEffects.PassiveEffectType;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ConfigUtil {
+public class BossParser {
+    private static JavaPlugin plugin = null;
 
-    static JavaPlugin plugin;
-    static File file;
-    static FileConfiguration fileConfig;
-
-    public static void createConfig() {
+    private static void getPlugin() {
         plugin = BossPlugin.getPlugin();
-        file = new File(plugin.getDataFolder(), "bosses.yml");
-        if(!file.exists()) {
-            plugin.saveResource("bosses.yml", false);
-        }
-        fileConfig = YamlConfiguration.loadConfiguration(file);
     }
 
-    public static ArrayList<BaseBoss> getBosses() {
+    public static BaseBoss parseBoss(Map<String, Object> bossData) {
+        if(plugin==null) {
+            getPlugin();
+        }
+
         // TODO: proper feedback using Bukkit.broadcastMessage() to inform user of yml mistakes
 
-        ArrayList<BaseBoss> bosses = new ArrayList<BaseBoss>();
-        // A second array is used to store bosses without an id until one can be given to them.
-        ArrayList<BaseBoss> idBosses = new ArrayList<>();
-
-        List bossList = fileConfig.getList("bosses");
-        if(bossList!=null) {
-            plugin.getLogger().info("Bosses detected");
-            for(Object bossEntry : bossList) {
-                // Convert boss config data to map
-                Map<String, Object> bossData = (Map<String, Object>) bossEntry;
-
-                // Values are read from config and filled with placeholders if not found
-                String name = bossData.containsKey("name") ? (String) bossData.get("name") : "Unnamed Boss";
-                int health = bossData.containsKey("health") ? (int) bossData.get("health") : 100;
-                int respawnTimer = bossData.containsKey("respawnTimer") ? (int) bossData.get("respawnTimer") : 500;
-                String worldString = bossData.containsKey("world") ? (String) bossData.get("world") : "world";
-                Map<String, Object> spawnLoc = (Map<String, Object>) bossData.get("spawnLocation");
-                double spawnX = spawnLoc.containsKey("x") ? ((Number) spawnLoc.get("x")).doubleValue() : 0;
-                double spawnY = spawnLoc.containsKey("y") ? ((Number) spawnLoc.get("y")).doubleValue() : 80;
-                double spawnZ = spawnLoc.containsKey("z") ? ((Number) spawnLoc.get("z")).doubleValue() : 0;
-                String mob = bossData.containsKey("mob") ? (String) bossData.get("mob") : "ZOMBIE";
+        // Values are read from config and filled with placeholders if not found
+        String name = bossData.containsKey("name") ? (String) bossData.get("name") : "Unnamed Boss";
+        int health = bossData.containsKey("health") ? (int) bossData.get("health") : 100;
+        int respawnTimer = bossData.containsKey("respawnTimer") ? (int) bossData.get("respawnTimer") : 500;
+        String worldString = bossData.containsKey("world") ? (String) bossData.get("world") : "world";
+        Map<String, Object> spawnLoc = (Map<String, Object>) bossData.get("spawnLocation");
+        double spawnX = spawnLoc.containsKey("x") ? ((Number) spawnLoc.get("x")).doubleValue() : 0;
+        double spawnY = spawnLoc.containsKey("y") ? ((Number) spawnLoc.get("y")).doubleValue() : 80;
+        double spawnZ = spawnLoc.containsKey("z") ? ((Number) spawnLoc.get("z")).doubleValue() : 0;
+        String mob = bossData.containsKey("mob") ? (String) bossData.get("mob") : "ZOMBIE";
 
 
-                // Load and parse attributes
-                List<Map<String, Object>> parsedAttributes = new ArrayList<>();
-                if(bossData.containsKey("attributes")) {
-                    for(Object attribute : (List) bossData.get("attributes")) {
-                        Map<String, Object> parsed = parseAttribute((Map<String, Object>) attribute);
-                        if(parsed!=null) {
-                            parsedAttributes.add(parsed);
-                        }
-                    }
-                }
-
-                // Load and parse phases
-                List<Phase> phases = new ArrayList<Phase>();
-                List<Map<String, Object>> phasesData = (ArrayList) bossData.get("phases");
-                if(!phasesData.isEmpty()) {
-                    for(Map<String, Object> phase : phasesData) {
-                        Phase parsed = parsePhase(phase);
-                        if(parsed!=null) {
-                            phases.add(parsed);
-
-                        }
-                    }
-                }
-
-                // Load and parse loottable items
-                List<Map<String, Object>> items = new ArrayList<>();
-                List<Map<String, Object>> lootData = (ArrayList) bossData.get("loottable");
-                if(!lootData.isEmpty()) {
-                    for(Map<String, Object> item : lootData) {
-                        Map<String, Object> parsed = parseLoottable(item);
-                        if(parsed!=null) {
-                            items.add(parsed);
-                        }
-                    }
-                }
-
-                // Values are applied to create boss
-                World world = Bukkit.getWorld(worldString);
-                if(world!=null) {
-                    CustomBoss boss = new CustomBoss(world, new Location(world, spawnX, spawnY, spawnZ), EntityType.valueOf(mob));
-
-                    // Boss object is given values to apply to itself upon spawning
-                    boss.setName(name);
-                    boss.createBossBar();
-                    boss.setHealth(health);
-                    boss.setRespawnTimer(respawnTimer);
-                    boss.setLootList(items);
-                    if(!phases.isEmpty()) {
-                        boss.setPhases(phases);
-                    } else {
-                        plugin.getLogger().info("No phases (or abilities) loaded for "+name);
-                    }
-
-                    if(!parsedAttributes.isEmpty()) {
-                        boss.setAttributes(parsedAttributes);
-                    } else {
-                        plugin.getLogger().info("No attributes loaded for "+name);
-                    }
-
-                    if(!bossData.containsKey("id")) {
-                        idBosses.add(boss);
-                    } else {
-                        try {
-                            boss.setId((int) bossData.get("id"));
-                            bosses.add(boss);
-                        } catch(NumberFormatException e) {
-                            plugin.getLogger().warning("Id for "+boss.getName()+" is invalid. Assigning automatic id.");
-                            idBosses.add(boss);
-                        }
-                    }
-
-                } else {
-                    plugin.getLogger().info(worldString+" is not a valid world.");
+        // Load and parse attributes
+        List<Map<String, Object>> parsedAttributes = new ArrayList<>();
+        if(bossData.containsKey("attributes")) {
+            for(Object attribute : (List) bossData.get("attributes")) {
+                Map<String, Object> parsed = parseAttribute((Map<String, Object>) attribute);
+                if(parsed!=null) {
+                    parsedAttributes.add(parsed);
                 }
             }
-            if(!idBosses.isEmpty()) {
-                for (BaseBoss idBoss : idBosses) {
-                    idBoss.setId(bosses.size());
-                    bosses.add(idBoss);
-                    for(Object bossEntry : bossList) {
-                        Map<String, Object> boss = (Map<String, Object>) bossEntry;
-                        if(idBoss.getName().equals(boss.get("name"))) {
-                            boss.put("id", idBoss.getId());
-                        }
-                    }
-                }
-                fileConfig.set("bosses", bossList);
-                try {
-                    fileConfig.save(file);
-                } catch(IOException e) {
-                    plugin.getLogger().warning(e.toString());
-                }
-
-            }
-        } else {
-            plugin.getLogger().info("no bosses");
         }
-        return bosses;
+
+        // Load and parse phases
+        List<Phase> phases = new ArrayList<Phase>();
+        List<Map<String, Object>> phasesData = (ArrayList) bossData.get("phases");
+        if(!phasesData.isEmpty()) {
+            for(Map<String, Object> phase : phasesData) {
+                Phase parsed = parsePhase(phase);
+                if(parsed!=null) {
+                    phases.add(parsed);
+
+                }
+            }
+        }
+
+        // Load and parse loottable items
+        List<Map<String, Object>> items = new ArrayList<>();
+        List<Map<String, Object>> lootData = (ArrayList) bossData.get("loottable");
+        if(!lootData.isEmpty()) {
+            for(Map<String, Object> item : lootData) {
+                Map<String, Object> parsed = parseLoottable(item);
+                if(parsed!=null) {
+                    items.add(parsed);
+                }
+            }
+        }
+
+        World world = parseWorld((String) bossData.get("world"));
+
+        // Values are applied to create boss
+        CustomBoss boss = new CustomBoss(world, new Location(world, spawnX, spawnY, spawnZ), EntityType.valueOf(mob));
+
+        // Boss object is given values to apply to itself upon spawning
+        boss.setName(name);
+        boss.createBossBar();
+        boss.setHealth(health);
+        boss.setRespawnTimer(respawnTimer);
+        boss.setLootList(items);
+        if(!phases.isEmpty()) {
+            boss.setPhases(phases);
+        } else {
+            plugin.getLogger().info("No phases (or abilities) loaded for "+name);
+        }
+
+        if(!parsedAttributes.isEmpty()) {
+            boss.setAttributes(parsedAttributes);
+        } else {
+            plugin.getLogger().info("No attributes loaded for "+name);
+        }
+
+        // Parse id
+        boss.setId(parseId(bossData.get("id")));
+
+        return boss;
+    }
+
+    public static Integer parseId(Object idData) {
+        if(idData==null) return null;
+        try {
+            return Integer.parseInt(idData.toString());
+        } catch(NumberFormatException e) {
+            plugin.getLogger().warning("Id for '"+idData+"' is invalid. Assigning automatic id.");
+            return null;
+        }
+    }
+
+    public static World parseWorld(String input) {
+        World world = Bukkit.getWorld(input);
+        if(world==null) {
+            plugin.getLogger().warning("World '"+input+"' does not exist, "+Bukkit.getWorlds().getFirst().toString()+" has been set instead.");
+            return Bukkit.getWorlds().getFirst();
+        } else {
+            return world;
+        }
     }
 
     public static Map<String, Object> parseAttribute(Map<String, Object> attributeData) {
@@ -187,9 +153,9 @@ public class ConfigUtil {
         }
         // If there is not at least one ability list return null
         if(
-            (!phaseData.containsKey("specialAbilities")||!phaseData.containsKey("specialCooldown"))
-            &&
-            (!phaseData.containsKey("baseAbilities")||!phaseData.containsKey("baseCooldown"))
+                (!phaseData.containsKey("specialAbilities")||!phaseData.containsKey("specialCooldown"))
+                        &&
+                        (!phaseData.containsKey("baseAbilities")||!phaseData.containsKey("baseCooldown"))
         ) {
             plugin.getLogger().info("Phase must contain either base or special abilities");
             return null;

@@ -6,7 +6,7 @@ import Alex.bossPlugin.listeners.BossDeathListener;
 import Alex.bossPlugin.listeners.EditorChatListener;
 import Alex.bossPlugin.listeners.MenuClickListener;
 import Alex.bossPlugin.listeners.MenuCloseListener;
-import Alex.bossPlugin.util.ConfigUtil;
+import Alex.bossPlugin.config.ConfigUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import org.bukkit.Bukkit;

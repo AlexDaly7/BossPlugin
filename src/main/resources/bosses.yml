@@ -1,6 +1,5 @@
 bosses:
  - name: "evilBoss..."
-   id: 1
    mob: "SKELETON"
    world: "world"
    health: 100
