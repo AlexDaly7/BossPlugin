@@ -43,10 +43,9 @@ public class ConfigUtil {
                         idBosses.add(boss);
                     }
                 } catch (Exception e) {
-                    plugin.getLogger().warning("Boss "+i+" info could not be loaded from config.\n"+e);
+                    plugin.getLogger().warning("Boss "+(i+1)+" info could not be loaded from config.\n"+e);
                 }
             }
-            plugin.getLogger().warning("Bosses size: "+bosses.size()+"\nIdBosses size: "+idBosses.size());
             addBossIds(bossList, bosses, idBosses);
         } else {
             plugin.getLogger().info("no bosses");
@@ -56,7 +55,6 @@ public class ConfigUtil {
 
     public static void addBossIds(List bossList, ArrayList<BaseBoss> bosses, ArrayList<BaseBoss> idBosses) {
         if(!idBosses.isEmpty()) {
-            plugin.getLogger().info("addBossId's called");
             for (BaseBoss idBoss : idBosses) {
                 idBoss.setId(bosses.size());
                 bosses.add(idBoss);

@@ -28,18 +28,22 @@ public class BossParser {
         if(plugin==null) {
             getPlugin();
         }
-
         // TODO: proper feedback using Bukkit.broadcastMessage() to inform user of yml mistakes
 
         // Values are read from config and filled with placeholders if not found
         String name = bossData.containsKey("name") ? (String) bossData.get("name") : "Unnamed Boss";
         int health = bossData.containsKey("health") ? (int) bossData.get("health") : 100;
         int respawnTimer = bossData.containsKey("respawnTimer") ? (int) bossData.get("respawnTimer") : 500;
-        String worldString = bossData.containsKey("world") ? (String) bossData.get("world") : "world";
-        Map<String, Object> spawnLoc = (Map<String, Object>) bossData.get("spawnLocation");
-        double spawnX = spawnLoc.containsKey("x") ? ((Number) spawnLoc.get("x")).doubleValue() : 0;
-        double spawnY = spawnLoc.containsKey("y") ? ((Number) spawnLoc.get("y")).doubleValue() : 80;
-        double spawnZ = spawnLoc.containsKey("z") ? ((Number) spawnLoc.get("z")).doubleValue() : 0;
+        Map<String, Object> spawnLoc = bossData.containsKey("spawnLocation") ?
+                (Map<String, Object>) bossData.get("spawnLocation") :
+                Map.of(
+                    "x", 0,
+                    "y", 80,
+                    "z", 0
+                );
+        double spawnX = ((Number) spawnLoc.get("x")).doubleValue();
+        double spawnY = ((Number) spawnLoc.get("y")).doubleValue();
+        double spawnZ = ((Number) spawnLoc.get("z")).doubleValue();
         String mob = bossData.containsKey("mob") ? (String) bossData.get("mob") : "ZOMBIE";
 
 
@@ -57,12 +61,14 @@ public class BossParser {
         // Load and parse phases
         List<Phase> phases = new ArrayList<Phase>();
         List<Map<String, Object>> phasesData = (ArrayList) bossData.get("phases");
-        if(!phasesData.isEmpty()) {
-            for(Map<String, Object> phase : phasesData) {
-                Phase parsed = parsePhase(phase);
-                if(parsed!=null) {
-                    phases.add(parsed);
+        if(phasesData!=null) {
+            if (!phasesData.isEmpty()) {
+                for (Map<String, Object> phase : phasesData) {
+                    Phase parsed = parsePhase(phase);
+                    if (parsed != null) {
+                        phases.add(parsed);
 
+                    }
                 }
             }
         }
@@ -70,11 +76,13 @@ public class BossParser {
         // Load and parse loottable items
         List<Map<String, Object>> items = new ArrayList<>();
         List<Map<String, Object>> lootData = (ArrayList) bossData.get("loottable");
-        if(!lootData.isEmpty()) {
-            for(Map<String, Object> item : lootData) {
-                Map<String, Object> parsed = parseLoottable(item);
-                if(parsed!=null) {
-                    items.add(parsed);
+        if(lootData!=null) {
+            if (!lootData.isEmpty()) {
+                for (Map<String, Object> item : lootData) {
+                    Map<String, Object> parsed = parseLoottable(item);
+                    if (parsed != null) {
+                        items.add(parsed);
+                    }
                 }
             }
         }

@@ -64,7 +64,6 @@ public class BossCreationMenu extends Menu {
                     BossManager.add(session.getBoss());
                 } else {
                     for(int i=0;i<bosses.size();i++) {
-                        player.sendMessage(bosses.get(i).getId().toString());
                         if(bosses.get(i).getId()==session.getBoss().getId()) {
                             bosses.get(i).despawnBoss();
                             bosses.remove(i);
