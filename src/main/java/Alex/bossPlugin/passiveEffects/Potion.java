@@ -10,33 +10,33 @@ import java.util.Collection;
 import java.util.Map;
 
 public class Potion extends PassiveEffect {
+    String potion;
 
     public Potion(Map<String, Object> data) {
         super(data);
+        potion = data.containsKey("potion") ? (String) data.get("potion") : "SLOW_FALLING";
     }
 
     @Override
     public void activate(Mob mob) {
-        int range = data.containsKey("range") ? (int) data.get("range") : 10;
-        int amplifier = data.containsKey("amplifier") ? (int) data.get("amplifier") : 2;
         Collection<Player> players = mob.getLocation().getNearbyPlayers(range);
 
         PotionEffect potionEffect;
         if(!players.isEmpty()) {
-            if(data.containsKey("potion")) {
-                try {
-                    potionEffect = PotionEffectType.getByName((String) data.get("potion")).createEffect(80, amplifier);
-                } catch (IllegalArgumentException e) {
-                    BossPlugin.getPlugin().getLogger().warning("Potion " + (String) data.get("potion") + " is not a valid potion.");
-                    return;
-                }
-            } else {
-                    BossPlugin.getPlugin().getLogger().warning("Missing potion field, default potion used");
-                    potionEffect = PotionEffectType.SLOWNESS.createEffect(80, amplifier);
+            try {
+                potionEffect = PotionEffectType.getByName(potion).createEffect(80, amplifier);
+            } catch (IllegalArgumentException e) {
+                BossPlugin.getPlugin().getLogger().warning("Potion " + (String) potion + " is not a valid potion.");
+                return;
             }
+
             for(Player player : players) {
                 player.addPotionEffect(potionEffect);
             }
         }
+    }
+
+    public String getPotion() {
+        return potion;
     }
 }

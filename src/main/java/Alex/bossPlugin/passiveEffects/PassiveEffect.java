@@ -5,13 +5,23 @@ import org.bukkit.entity.Mob;
 import java.util.Map;
 
 public class PassiveEffect {
-    protected Map<String, Object> data;
+    int amplifier;
+    int range;
 
     public PassiveEffect(Map<String, Object> data) {
-        this.data = data;
+        range = data.containsKey("range") ? (int) data.get("range") : 10;
+        amplifier = data.containsKey("amplifier") ? (int) data.get("amplifier") : 2;
     }
 
     public void activate(Mob mob) {
 
+    }
+
+    public int getRange() {
+        return range;
+    }
+
+    public int getAmplifier() {
+        return amplifier;
     }
 }
