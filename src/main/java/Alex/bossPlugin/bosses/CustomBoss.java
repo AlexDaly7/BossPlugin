@@ -50,6 +50,10 @@ public class CustomBoss extends BaseBoss {
         }
     }
 
+    public List<Map<String, Object>> getAttributes() {
+        return attributes;
+    }
+
     public EntityType getEntityType() {
         return entityType;
     }

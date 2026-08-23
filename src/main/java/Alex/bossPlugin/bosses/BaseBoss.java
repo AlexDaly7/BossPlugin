@@ -200,11 +200,11 @@ public class BaseBoss {
         return respawnTimer;
     }
 
-    public void setLootList(List lootList) {
+    public void setLootList(List<Map<String, Object>> lootList) {
         this.lootList = lootList;
     }
 
-    public List getLootList() {
+    public List<Map<String, Object>> getLootList() {
         return lootList;
     }
 

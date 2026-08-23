@@ -12,10 +12,10 @@ bosses:
     - attribute: "generic_scale"
       value: 2.0
    loottable:
-    - item: DIAMOND
+    - item: "DIAMOND"
       amount: 5
       chance: 0.5
-    - item: EMERALD
+    - item: "EMERALD"
       amount: 10
       chance: 0.9
    phases:

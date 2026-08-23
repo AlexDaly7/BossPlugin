@@ -3,6 +3,7 @@ package Alex.bossPlugin.config;
 import Alex.bossPlugin.abilities.Ability;
 import Alex.bossPlugin.bosses.BaseBoss;
 import Alex.bossPlugin.bosses.BossManager;
+import Alex.bossPlugin.bosses.CustomBoss;
 import Alex.bossPlugin.bosses.Phase;
 import Alex.bossPlugin.passiveEffects.PassiveEffect;
 import Alex.bossPlugin.passiveEffects.PassiveEffectType;
@@ -40,6 +41,25 @@ public class BossSerializer {
             }
         }
 
+        List<Map<String, Object>> lootTable = new ArrayList<>();
+        for(Map<String, Object> loot : boss.getLootList()) {
+            lootTable.add(serializeLoot(loot));
+        }
+        map.put("loottable", lootTable);
+
+        if(boss instanceof CustomBoss) {
+            List<Map<String, Object>> attributes = new ArrayList<>();
+            for(Map<String, Object> attribute : ((CustomBoss) boss).getAttributes()) {
+                Map<String, Object> attributeMap = serializeAttribute(attribute);
+                if(attributeMap!=null) {
+                    attributes.add(attributeMap);
+                }
+            }
+            map.put("attributes", attributes);
+        }
+
+
+        return map;
     }
 
     public static Map<String, Object> serializePhase(Phase phase) {
@@ -71,13 +91,13 @@ public class BossSerializer {
 
         List<Map<String, Object>> specialAbilities = new ArrayList<>();
         for(Ability ability : phase.getSpecialAbilities()) {
-            specialAbilities.add(serialiseAbility(ability));
+            specialAbilities.add(serializeAbility(ability));
         }
         phaseMap.put("specialAbilities", specialAbilities);
 
         List<Map<String, Object>> baseAbilities = new ArrayList<>();
         for(Ability ability : phase.getBaseAbilities()) {
-            baseAbilities.add(serialiseAbility(ability));
+            baseAbilities.add(serializeAbility(ability));
         }
         phaseMap.put("baseAbilities", baseAbilities);
 
@@ -100,7 +120,7 @@ public class BossSerializer {
         return effectMap;
     }
 
-    public static Map<String, Object> serialiseAbility(Ability ability) {
+    public static Map<String, Object> serializeAbility(Ability ability) {
         Map<String, Object> abilityMap = new HashMap<>();
 
         // Ability name must be in uppercase with _ between each word.
@@ -117,5 +137,21 @@ public class BossSerializer {
         });
 
         return abilityMap;
+    }
+
+    public static Map<String, Object> serializeLoot(Map<String, Object> loot) {
+        if(loot.containsKey("item")&&loot.containsKey("amount")) {
+            return loot;
+        } else {
+            return null;
+        }
+    }
+
+    public static Map<String, Object> serializeAttribute(Map<String, Object> attribute) {
+        if(attribute.containsKey("attribute")&&attribute.containsKey("value")) {
+            return attribute;
+        } else {
+            return null;
+        }
     }
 }
