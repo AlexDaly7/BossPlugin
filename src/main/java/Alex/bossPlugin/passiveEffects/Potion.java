@@ -36,7 +36,8 @@ public class Potion extends PassiveEffect {
         }
     }
 
-    public String getPotion() {
-        return potion;
+    @Override
+    public Map<String, Object> getData() {
+        return Map.of("potion", potion);
     }
 }

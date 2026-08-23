@@ -24,4 +24,9 @@ public class PassiveEffect {
     public int getAmplifier() {
         return amplifier;
     }
+
+    public Map<String, Object> getData() {
+        return Map.of();
+    }
+
 }

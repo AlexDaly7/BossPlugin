@@ -102,6 +102,10 @@ public class Phase {
         }
     }
 
+    public List<PassiveEffect> getEffects() {
+        return passiveEffects;
+    }
+
     public void addBaseAbility(Ability ability) {
         baseAbilities.add(ability);
     }

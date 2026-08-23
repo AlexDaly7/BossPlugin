@@ -31,4 +31,8 @@ public class Ability {
     public Material getItem() {
         return displayItem;
     }
+
+    public Map<String, Object> getData() {
+        return data;
+    }
 }
