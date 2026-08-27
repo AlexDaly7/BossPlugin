@@ -14,8 +14,8 @@ public class BossManager {
     static ArrayList<BaseBoss> bosses = new ArrayList<>();
 
     public static void loadBosses(ArrayList<BaseBoss> loadedBosses) {
-        bosses = loadedBosses;
         stop();
+        bosses = loadedBosses;
         start();
     }
 
