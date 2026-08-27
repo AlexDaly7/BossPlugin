@@ -6,7 +6,6 @@ import Alex.bossPlugin.bosses.BossManager;
 import Alex.bossPlugin.bosses.CustomBoss;
 import Alex.bossPlugin.bosses.Phase;
 import Alex.bossPlugin.passiveEffects.PassiveEffect;
-import Alex.bossPlugin.passiveEffects.PassiveEffectType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +17,7 @@ public class BossSerializer {
     public static Map<String, Object> serializeBoss(BaseBoss boss) {
         Map<String, Object> map = new HashMap<>();
         map.put("name", boss.getName()!=null ? boss.getName() : "Un-named boss");
-        map.put("world", boss.getSpawnLoc().getWorld());
+        map.put("world", boss.getSpawnLoc().getWorld().getName());
         map.put("spawnLocation", Map.of(
                 "x", boss.getSpawnLoc().getX(),
                 "y", boss.getSpawnLoc().getY(),
@@ -33,6 +32,11 @@ public class BossSerializer {
             map.put("id", BossManager.getBosses().size());
         }
 
+        // This is so BaseBoss bosses (preset bosses) can still be edited
+        if(boss instanceof CustomBoss) {
+            map.put("mob", ((CustomBoss) boss).getEntityType().toString());
+        }
+
         List<Map<String, Object>> phaseList = new ArrayList<>();
         for(Phase phase : boss.getPhases()) {
             Map<String, Object> phaseMap = serializePhase(phase);
@@ -42,12 +46,14 @@ public class BossSerializer {
         }
 
         List<Map<String, Object>> lootTable = new ArrayList<>();
-        for(Map<String, Object> loot : boss.getLootList()) {
-            lootTable.add(serializeLoot(loot));
+        if(boss.getLootList()!=null) {
+            for (Map<String, Object> loot : boss.getLootList()) {
+                lootTable.add(serializeLoot(loot));
+            }
+            map.put("loottable", lootTable);
         }
-        map.put("loottable", lootTable);
 
-        if(boss instanceof CustomBoss) {
+        if(boss instanceof CustomBoss&&((CustomBoss) boss).getAttributes()!=null) {
             List<Map<String, Object>> attributes = new ArrayList<>();
             for(Map<String, Object> attribute : ((CustomBoss) boss).getAttributes()) {
                 Map<String, Object> attributeMap = serializeAttribute(attribute);
@@ -57,7 +63,6 @@ public class BossSerializer {
             }
             map.put("attributes", attributes);
         }
-
 
         return map;
     }
@@ -105,11 +110,10 @@ public class BossSerializer {
     }
 
     public static Map<String, Object> serializeEffect(PassiveEffect effect) {
-        Map<String, Object> effectMap = Map.of(
-            "effect", PassiveEffectType.valueOf(effect.getClass().toString()),
-            "range", effect.getRange(),
-            "amplifier", effect.getAmplifier()
-        );
+        Map<String, Object> effectMap = new HashMap<>();
+        effectMap.put("effect", effect.getClass().toString());
+        effectMap.put("range", effect.getRange());
+        effectMap.put("amplifier", effect.getAmplifier());
 
         // Save extra fields from effect.
         Map<String, Object> extraData = effect.getData();

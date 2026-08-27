@@ -75,4 +75,29 @@ public class ConfigUtil {
         }
     }
 
+    public static void saveBoss(BaseBoss boss) {
+        List<Map<String, Object>> bosses = (List<Map<String, Object>>) fileConfig.getList("bosses");
+        boolean bossExists = false;
+        int bossIndex = 0;
+        for(int i=0;i<bosses.size();i++) {
+            if(bossExists) return;
+            if(boss.getId().equals(bosses.get(i).get("id"))) {
+                bossExists = true;
+                bossIndex = i;
+            }
+        }
+        if(bossExists) {
+            bosses.remove(bossIndex);
+            bosses.add(bossIndex, BossSerializer.serializeBoss(boss));
+        } else {
+            bosses.add(BossSerializer.serializeBoss(boss));
+        }
+        fileConfig.set("bosses", bosses);
+        try {
+            fileConfig.save(file);
+        } catch(IOException e) {
+            plugin.getLogger().warning(e.toString());
+        }
+    }
+
 }

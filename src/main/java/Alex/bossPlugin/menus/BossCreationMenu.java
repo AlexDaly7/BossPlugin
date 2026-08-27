@@ -2,6 +2,7 @@ package Alex.bossPlugin.menus;
 
 import Alex.bossPlugin.bosses.BaseBoss;
 import Alex.bossPlugin.bosses.BossManager;
+import Alex.bossPlugin.config.ConfigUtil;
 import Alex.bossPlugin.util.MenuUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -60,20 +61,18 @@ public class BossCreationMenu extends Menu {
                 if(session.getBoss().getId()==null) {
                     session.getBoss().setId(bosses.size());
                     player.sendMessage("ID: "+session.getBoss().getId());
-                    session.getBoss().spawnBoss();
-                    BossManager.add(session.getBoss());
+                    ConfigUtil.saveBoss(session.getBoss());
+                    BossManager.loadBosses(ConfigUtil.getBosses());
                 } else {
                     for(int i=0;i<bosses.size();i++) {
                         if(bosses.get(i).getId()==session.getBoss().getId()) {
                             bosses.get(i).despawnBoss();
                             bosses.remove(i);
-                            session.getBoss().spawnBoss();
-                            bosses.add(i, session.getBoss());
+                            ConfigUtil.saveBoss(session.getBoss());
+                            BossManager.loadBosses(ConfigUtil.getBosses());
                         }
                     }
                 }
-
-
 
                 session.openLastMenu();
             }

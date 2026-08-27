@@ -55,7 +55,10 @@ public class BaseBoss {
     public void spawnBoss() {}
 
     public void despawnBoss() {
-        mob.remove();
+        if(mob!=null) {
+            mob.remove();
+            removeBossBar();
+        }
     }
 
     public void tickAbilities() {

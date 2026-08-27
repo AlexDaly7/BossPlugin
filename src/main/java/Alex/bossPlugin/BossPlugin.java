@@ -26,7 +26,6 @@ public final class BossPlugin extends JavaPlugin {
         //BaseBoss spider = new EvilSpider(world, new Location(world, 200, 83, 200));
         //BossManager.add(spider);
         BossManager.loadBosses(ConfigUtil.getBosses());
-        BossManager.start();
 
         // Load listeners
         Bukkit.getPluginManager().registerEvents(new BossDeathListener(), this);

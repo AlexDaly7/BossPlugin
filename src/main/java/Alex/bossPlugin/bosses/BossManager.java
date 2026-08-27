@@ -15,10 +15,13 @@ public class BossManager {
 
     public static void loadBosses(ArrayList<BaseBoss> loadedBosses) {
         bosses = loadedBosses;
+        stop();
+        start();
     }
 
     public static void start() {
         // Spawn bosses on plugin start
+        plugin.getLogger().info("Starting boss manager");
         for(BaseBoss boss : bosses) {
             boss.spawnBoss();
         }
@@ -64,8 +67,12 @@ public class BossManager {
             }
         }
         for(BaseBoss boss : bosses) {
-            boss.removeBossBar();
-            boss.despawnBoss();
+            try {
+                plugin.getLogger().info(boss.getName()+" despawned");
+                boss.despawnBoss();
+            } catch (Exception e) {
+                plugin.getLogger().warning("There was a problem despawning "+boss.getName());
+            }
         }
 
     }
