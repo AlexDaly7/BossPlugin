@@ -1,5 +1,7 @@
 package Alex.bossPlugin.bosses;
 
+import Alex.bossPlugin.BossPlugin;
+import org.apache.commons.lang3.ObjectUtils;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -45,7 +47,11 @@ public class CustomBoss extends BaseBoss {
     public void applyAttributes() {
         if (attributes!=null) {
             attributes.forEach(entry -> {
-                mob.getAttribute((Attribute) entry.get("attribute")).setBaseValue(((Number) entry.get("value")).doubleValue());
+                try {
+                    mob.getAttribute((Attribute) entry.get("attribute")).setBaseValue(((Number) entry.get("value")).doubleValue());
+                } catch (NullPointerException e) {
+                    BossPlugin.getPlugin().getLogger().warning(entry.get("attribute")+" could not be loaded onto "+name+".");
+                }
             });
         }
     }

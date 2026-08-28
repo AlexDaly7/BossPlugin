@@ -50,10 +50,12 @@ public class BossParser {
         // Load and parse attributes
         List<Map<String, Object>> parsedAttributes = new ArrayList<>();
         if(bossData.containsKey("attributes")) {
-            for(Object attribute : (List) bossData.get("attributes")) {
-                Map<String, Object> parsed = parseAttribute((Map<String, Object>) attribute);
-                if(parsed!=null) {
-                    parsedAttributes.add(parsed);
+            if(bossData.get("attributes")!=null) {
+                for (Object attribute : (List) bossData.get("attributes")) {
+                    Map<String, Object> parsed = parseAttribute((Map<String, Object>) attribute);
+                    if (parsed != null) {
+                        parsedAttributes.add(parsed);
+                    }
                 }
             }
         }

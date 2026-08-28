@@ -76,6 +76,9 @@ public class BossCreationMenu extends Menu {
 
                 session.openLastMenu();
             }
+            case 6 -> {
+                session.openMenu(new AttributeMenu(player, session));
+            }
         }
     }
 
@@ -170,6 +173,13 @@ public class BossCreationMenu extends Menu {
                     Component.text("Respawn time: "+session.getBoss().getRespawnTimer()),
                     Component.text("Click to change boss respawn time.")
                 )
+            )
+        );
+        menu.setItem(6,
+            MenuUtil.createButton(
+                Material.CHORUS_FLOWER,
+                Component.text("Change boss attributes"),
+                List.of(Component.text("Click to see a list of boss attributes"))
             )
         );
         player.openInventory(menu);
