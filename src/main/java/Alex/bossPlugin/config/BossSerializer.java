@@ -18,6 +18,8 @@ public class BossSerializer {
 
     public static Map<String, Object> serializeBoss(BaseBoss boss) {
         Map<String, Object> map = new HashMap<>();
+
+        // Serialize simple essential values.
         map.put("name", boss.getName()!=null ? boss.getName() : "Un-named boss");
         map.put("world", boss.getSpawnLoc().getWorld().getName());
         map.put("spawnLocation", Map.of(
@@ -28,6 +30,7 @@ public class BossSerializer {
         map.put("health", boss.getHealth());
         map.put("respawnTimer", boss.getRespawnTimer());
 
+        // If boss does not have an id, one is provided for them.
         if(boss.getId()!=null) {
             map.put("id", boss.getId());
         } else {
@@ -39,6 +42,7 @@ public class BossSerializer {
             map.put("mob", ((CustomBoss) boss).getEntityType().toString());
         }
 
+        // Serialize phases
         List<Map<String, Object>> phaseList = new ArrayList<>();
         for(Phase phase : boss.getPhases()) {
             Map<String, Object> phaseMap = serializePhase(phase);
@@ -47,6 +51,7 @@ public class BossSerializer {
             }
         }
 
+        // Serialize loottable
         List<Map<String, Object>> lootTable = new ArrayList<>();
         if(boss.getLootList()!=null) {
             for (Map<String, Object> loot : boss.getLootList()) {
@@ -55,6 +60,7 @@ public class BossSerializer {
             map.put("loottable", lootTable);
         }
 
+        // Serialize attributes
         if(boss instanceof CustomBoss&&((CustomBoss) boss).getAttributes()!=null) {
             List<Map<String, Object>> attributes = new ArrayList<>();
             for(Map<String, Object> attribute : ((CustomBoss) boss).getAttributes()) {
@@ -88,6 +94,7 @@ public class BossSerializer {
         }
         phaseMap.put("transition", transitionMap);
 
+        // Serialize phase effects.
         List<Map<String, Object>> effects = new ArrayList<>();
         if(phase.getEffects()!=null) {
             for(PassiveEffect effect : phase.getEffects()) {
@@ -96,6 +103,7 @@ public class BossSerializer {
             phaseMap.put("effects", effects);
         }
 
+        // Serialize special and base abilities.
         List<Map<String, Object>> specialAbilities = new ArrayList<>();
         for(Ability ability : phase.getSpecialAbilities()) {
             specialAbilities.add(serializeAbility(ability));
@@ -136,8 +144,9 @@ public class BossSerializer {
         );
 
         Map<String, Object> savedData = ability.getData();
-        savedData.remove("ability");
 
+        // Abilities have specific extra data per ability that must be stored.
+        savedData.remove("ability");
         savedData.forEach((string, object) -> {
            abilityMap.put(string, object);
         });
