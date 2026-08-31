@@ -6,6 +6,8 @@ import Alex.bossPlugin.bosses.BossManager;
 import Alex.bossPlugin.bosses.CustomBoss;
 import Alex.bossPlugin.bosses.Phase;
 import Alex.bossPlugin.passiveEffects.PassiveEffect;
+import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,7 +113,7 @@ public class BossSerializer {
 
     public static Map<String, Object> serializeEffect(PassiveEffect effect) {
         Map<String, Object> effectMap = new HashMap<>();
-        effectMap.put("effect", effect.getClass().toString());
+        effectMap.put("effect", effect.getClass().getName());
         effectMap.put("range", effect.getRange());
         effectMap.put("amplifier", effect.getAmplifier());
 
@@ -145,15 +147,28 @@ public class BossSerializer {
 
     public static Map<String, Object> serializeLoot(Map<String, Object> loot) {
         if(loot.containsKey("item")&&loot.containsKey("amount")) {
-            return loot;
-        } else {
-            return null;
+            if(loot.get("item") instanceof Material) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("item", ((Material) loot.get("item")).name());
+                map.put("amount", loot.get("amount"));
+                return map;
+            } else {
+                return loot;
+            }
         }
+        return null;
     }
 
     public static Map<String, Object> serializeAttribute(Map<String, Object> attribute) {
         if(attribute.containsKey("attribute")&&attribute.containsKey("value")) {
-            return attribute;
+            if(attribute.get("attribute") instanceof Attribute) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("attribute", ((Attribute) attribute.get("attribute")).name());
+                map.put("value", attribute.get("value"));
+                return map;
+            } else {
+                return attribute;
+            }
         } else {
             return null;
         }

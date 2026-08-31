@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Mob;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Ability {
@@ -32,7 +33,7 @@ public class Ability {
         return displayItem;
     }
 
-    public Map<String, Object> getData() {
-        return data;
+    public Map<String, Object>  getData() {
+        return new HashMap<>(data);
     }
 }
