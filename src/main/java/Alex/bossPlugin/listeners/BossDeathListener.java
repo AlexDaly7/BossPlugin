@@ -17,11 +17,13 @@ public class BossDeathListener implements Listener {
 
     @EventHandler
     public void onBossDeath(EntityDeathEvent event) {
-        // TODO: Put out fire when boss dies to not destroy drops
         if(!event.getEntity().getScoreboardTags().contains("boss")) return;
         for(BaseBoss boss : BossManager.getBosses()) {
+            if(!boss.getName().equals(event.getEntity().getName())) return;
+
             List<Map<String, Object>> lootList = boss.getLootList();
             Location loc = boss.getLocation();
+            BossPlugin.getPlugin().getLogger().info(boss.getName()+" has died");
 
             // Removes fire from around the boss to stop drops from being burnt
             double radius = 3;
