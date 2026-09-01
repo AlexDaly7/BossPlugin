@@ -79,6 +79,9 @@ public class BossCreationMenu extends Menu {
             case 6 -> {
                 session.openMenu(new AttributeMenu(player, session));
             }
+            case 7 -> {
+                session.openMenu(new LootListMenu(player, session));
+            }
         }
     }
 
@@ -180,6 +183,13 @@ public class BossCreationMenu extends Menu {
                 Material.CHORUS_FLOWER,
                 Component.text("Change boss attributes"),
                 List.of(Component.text("Click to see a list of boss attributes"))
+            )
+        );
+        menu.setItem(7,
+            MenuUtil.createButton(
+                Material.DIAMOND,
+                Component.text("Change boss loottable"),
+                List.of(Component.text("Click to change boss loottable"))
             )
         );
         player.openInventory(menu);
