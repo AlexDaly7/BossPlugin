@@ -12,7 +12,6 @@ import java.util.List;
 public class PhaseListMenu extends MultiPageMenu {
     public PhaseListMenu(Player player, MenuSession session) {
         super(player, session);
-        menu = Bukkit.createInventory(player, 54);
     }
 
     @Override
@@ -37,6 +36,7 @@ public class PhaseListMenu extends MultiPageMenu {
 
     @Override
     public void openSelf() {
+        pages.clear();
         List<Phase> phases = session.getBoss().getPhases();
         int count = 0;
 
@@ -48,11 +48,11 @@ public class PhaseListMenu extends MultiPageMenu {
             if(wool==null) wool = Material.GRAY_WOOL;
 
             items.add(
-                    MenuUtil.createButton(
-                            wool,
-                            Component.text(""+phase.getMaxHealthRange()),
-                            List.of(Component.text("Click to manage phase "+phase.getMaxHealthRange()))
-                    )
+                MenuUtil.createButton(
+                    wool,
+                    Component.text(""+phase.getMaxHealthRange()),
+                    List.of(Component.text("Click to manage phase "+phase.getMaxHealthRange()))
+                )
             );
         }));
 
@@ -60,18 +60,18 @@ public class PhaseListMenu extends MultiPageMenu {
 
         pages.forEach(inventory -> {
             inventory.setItem(48,
-                    MenuUtil.createButton(
-                            Material.NETHER_STAR,
-                            Component.text("Create phase"),
-                            List.of(Component.text("Click to create a new phase"))
-                    )
+                MenuUtil.createButton(
+                    Material.NETHER_STAR,
+                    Component.text("Create phase"),
+                    List.of(Component.text("Click to create a new phase"))
+                )
             );
             inventory.setItem(45,
-                    MenuUtil.createButton(
-                            Material.CRYING_OBSIDIAN,
-                            Component.text("Go back to previous menu"),
-                            List.of(Component.text("Click to go back to the previous menu"))
-                    )
+                MenuUtil.createButton(
+                    Material.CRYING_OBSIDIAN,
+                    Component.text("Go back to previous menu"),
+                    List.of(Component.text("Click to go back to the previous menu"))
+                )
             );
         });
         player.openInventory(pages.getFirst());

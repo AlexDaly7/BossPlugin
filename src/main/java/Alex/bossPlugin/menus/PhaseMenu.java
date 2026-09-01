@@ -1,5 +1,6 @@
 package Alex.bossPlugin.menus;
 
+import Alex.bossPlugin.bosses.Phase;
 import Alex.bossPlugin.util.MenuUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -49,6 +50,16 @@ public class PhaseMenu extends Menu {
                 preTextInput();
                 player.sendMessage("Enter the cooldown (in seconds) between base abilities.");
                 currentInput = inputEnum.BASECOOLDOWN;
+            }
+            case 28 -> {
+                List<Phase> phases = session.getBoss().getPhases();
+                for(int i=0;i<phases.size();i++) {
+                    if(phases.get(i).getMaxHealthRange()==session.getPhase().getMaxHealthRange()) {
+                        phases.remove(i);
+                        session.getBoss().setPhases(phases);
+                    }
+                }
+                session.openLastMenu();
             }
         }
     }
@@ -140,11 +151,18 @@ public class PhaseMenu extends Menu {
             )
         );
         menu.setItem(11,
-                MenuUtil.createButton(
-                        Material.CLOCK,
-                        Component.text("Set base ability cooldown"),
-                        List.of(Component.text("The current cooldown is "+session.getPhase().getMaxBaseCooldown()+"."))
-                )
+            MenuUtil.createButton(
+                Material.CLOCK,
+                Component.text("Set base ability cooldown"),
+                List.of(Component.text("The current cooldown is "+session.getPhase().getMaxBaseCooldown()+"."))
+            )
+        );
+        menu.setItem(28,
+            MenuUtil.createButton(
+                Material.TNT,
+                Component.text("Delete current phase"),
+                List.of(Component.text("Click to delete the currently selected phase"))
+            )
         );
 
         player.openInventory(menu);
