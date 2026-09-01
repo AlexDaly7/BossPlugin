@@ -127,8 +127,9 @@ public class BaseBoss {
                     }
                 }
             }
-
-            activePhase.activateEffects(mob);
+            if(activePhase!=null) {
+                activePhase.activateEffects(mob);
+            }
         }
     }
 

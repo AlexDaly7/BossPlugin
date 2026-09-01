@@ -51,6 +51,9 @@ public class PhaseMenu extends Menu {
                 player.sendMessage("Enter the cooldown (in seconds) between base abilities.");
                 currentInput = inputEnum.BASECOOLDOWN;
             }
+            case 3 -> {
+                session.openMenu(new TransitionMenu(player, session));
+            }
             case 28 -> {
                 List<Phase> phases = session.getBoss().getPhases();
                 for(int i=0;i<phases.size();i++) {
@@ -123,9 +126,9 @@ public class PhaseMenu extends Menu {
                 Material.REDSTONE_BLOCK,
                 Component.text("Set health to transition at"),
                 List.of(
-                        Component.text("Sets the percentage of health that the"),
-                        Component.text("boss will transition to this phase at."),
-                        Component.text("The current value is "+session.getPhase().getMaxHealthRange())
+                    Component.text("Sets the percentage of health that the"),
+                    Component.text("boss will transition to this phase at."),
+                    Component.text("The current value is "+session.getPhase().getMaxHealthRange())
                 )
             )
         );
@@ -141,6 +144,13 @@ public class PhaseMenu extends Menu {
                 Material.NETHER_STAR,
                 Component.text("Open base abilities menu"),
                 List.of(Component.text("Click to open base abilities menu"))
+            )
+        );
+        menu.setItem(3,
+            MenuUtil.createButton(
+                Material.BEACON,
+                Component.text("Open transition menu"),
+                List.of(Component.text("Click to open this phases transition menu"))
             )
         );
         menu.setItem(10,
