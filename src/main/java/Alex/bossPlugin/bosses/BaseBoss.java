@@ -104,17 +104,18 @@ public class BaseBoss {
                 if (activePhase != currentPhase) {
                     activePhase = currentPhase;
                     mob.setNoDamageTicks((int) activePhase.getTransitionTime()*20);
-                    BossPlugin.getPlugin().getLogger().info("Invulnerablility: "+mob.isInvulnerable());
-                    TaskUtil.runTimedTask(() -> {
-                        world.spawnParticle(activePhase.getParticle(),
-                                mob.getX(),
-                                mob.getY(),
-                                mob.getZ(),
-                                30,
-                                2, 2, 2
-                        );
+                    if(activePhase.getParticle()!=null) {
+                        TaskUtil.runTimedTask(() -> {
+                            world.spawnParticle(activePhase.getParticle(),
+                                    mob.getX(),
+                                    mob.getY(),
+                                    mob.getZ(),
+                                    30,
+                                    2, 2, 2
+                            );
 
-                    }, 0, 2, (int) activePhase.getTransitionTime()*10);
+                        }, 0, 2, (int) activePhase.getTransitionTime() * 10);
+                    }
                 }
             } else {
                 if(startingPhase==null) {
