@@ -17,6 +17,7 @@ public class BossDeathListener implements Listener {
 
     @EventHandler
     public void onBossDeath(EntityDeathEvent event) {
+        // Scoreboard tags cannot be set by the player, making it impossible to name a mob a bosses name and get the drops.
         if(!event.getEntity().getScoreboardTags().contains("boss")) return;
         for(BaseBoss boss : BossManager.getBosses()) {
             if(!boss.getName().equals(event.getEntity().getName())) return;

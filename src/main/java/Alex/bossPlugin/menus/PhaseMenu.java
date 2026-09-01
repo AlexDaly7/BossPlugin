@@ -10,7 +10,9 @@ import java.util.List;
 
 public class PhaseMenu extends Menu {
     private enum inputEnum {
-        HEALTH
+        HEALTH,
+        BASECOOLDOWN,
+        SPECIALCOOLDOWN
     }
 
     public PhaseMenu(Player player, MenuSession session) {
@@ -38,6 +40,16 @@ public class PhaseMenu extends Menu {
                 AbilityListMenu abilityMenu = new AbilityListMenu(player, session);
                 session.openMenu(abilityMenu);
             }
+            case 10 -> {
+                preTextInput();
+                player.sendMessage("Enter the cooldown (in seconds) between special abilities.");
+                currentInput = inputEnum.SPECIALCOOLDOWN;
+            }
+            case 11 -> {
+                preTextInput();
+                player.sendMessage("Enter the cooldown (in seconds) between base abilities.");
+                currentInput = inputEnum.BASECOOLDOWN;
+            }
         }
     }
 
@@ -57,9 +69,30 @@ public class PhaseMenu extends Menu {
                 } catch(NumberFormatException e) {
                     player.sendMessage("That is not a valid number.");
                 }
-
-
-
+            }
+            case SPECIALCOOLDOWN -> {
+                int cooldown;
+                try {
+                    cooldown = Integer.parseInt(input);
+                    if(cooldown>0) {
+                        session.getPhase().setMaxSpecialCooldown(cooldown);
+                        openSelf();
+                    }
+                } catch (NumberFormatException e) {
+                    player.sendMessage("That is not a valid number.");
+                }
+            }
+            case BASECOOLDOWN -> {
+                int cooldown;
+                try {
+                    cooldown = Integer.parseInt(input);
+                    if(cooldown>0) {
+                        session.getPhase().setMaxBaseCooldown(cooldown);
+                        openSelf();
+                    }
+                } catch (NumberFormatException e) {
+                    player.sendMessage("That is not a valid number.");
+                }
             }
         }
     }
@@ -93,10 +126,24 @@ public class PhaseMenu extends Menu {
             )
         );
         menu.setItem(2,
+            MenuUtil.createButton(
+                Material.NETHER_STAR,
+                Component.text("Open base abilities menu"),
+                List.of(Component.text("Click to open base abilities menu"))
+            )
+        );
+        menu.setItem(10,
+            MenuUtil.createButton(
+                Material.BELL,
+                Component.text("Set special ability cooldown"),
+                List.of(Component.text("The current cooldown is "+session.getPhase().getMaxSpecialCooldown()+"."))
+            )
+        );
+        menu.setItem(11,
                 MenuUtil.createButton(
-                        Material.NETHER_STAR,
-                        Component.text("Open base abilities menu"),
-                        List.of(Component.text("Click to open base abilities menu"))
+                        Material.CLOCK,
+                        Component.text("Set base ability cooldown"),
+                        List.of(Component.text("The current cooldown is "+session.getPhase().getMaxBaseCooldown()+"."))
                 )
         );
 

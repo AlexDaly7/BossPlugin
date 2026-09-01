@@ -76,6 +76,14 @@ public class Phase {
         return maxBaseCooldown;
     }
 
+    public void setMaxBaseCooldown(int maxBaseCooldown) {
+        this.maxBaseCooldown = maxBaseCooldown;
+    }
+
+    public void setMaxSpecialCooldown(int maxSpecialCooldown) {
+        this.maxSpecialCooldown = maxSpecialCooldown;
+    }
+
     public void setParticle(Particle particle) {
         this.particle = particle;
     }

@@ -50,6 +50,9 @@ public class BossSerializer {
                 phaseList.add(phaseMap);
             }
         }
+        if(!phaseList.isEmpty()) {
+            map.put("phases", phaseList);
+        }
 
         // Serialize loottable
         List<Map<String, Object>> lootTable = new ArrayList<>();
