@@ -20,7 +20,9 @@ public class Menu {
     public void handleClick(int slot) {}
 
     public void preTextInput() {
-        menu.close();
+        if(menu!=null) {
+            menu.close();
+        }
         player.sendMessage("Type \"exit\" to go back to the menu");
     }
 
