@@ -163,6 +163,9 @@ public class BossSerializer {
                 Map<String, Object> map = new HashMap<>();
                 map.put("item", ((Material) loot.get("item")).name());
                 map.put("amount", loot.get("amount"));
+                if(loot.containsKey("chance")) {
+                    map.put("chance", loot.get("chance"));
+                }
                 return map;
             } else {
                 return loot;
