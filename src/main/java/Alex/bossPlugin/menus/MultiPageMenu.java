@@ -25,6 +25,14 @@ public class MultiPageMenu extends Menu {
         player.openInventory(pages.getFirst());
     }
 
+    @Override
+    public void preTextInput() {
+        if(pages.get(currentPage)!=null) {
+            pages.get(currentPage).close();
+        }
+        player.sendMessage("Type \"exit\" to go back to the menu");
+    }
+
     public void fillPages() {
         if(!items.isEmpty()) {
             int pageCount = (items.size() / 45);
