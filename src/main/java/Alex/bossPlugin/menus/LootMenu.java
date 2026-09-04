@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,14 +56,18 @@ public class LootMenu extends Menu {
             case 25 -> {
                 List<Map<String, Object>> lootList = session.getBoss().getLootList();
                 boolean itemExists = false;
-                for(int i=0;i<lootList.size();i++) {
-                    if(lootList.get(i).equals(oldData)) {
-                        lootList.remove(i);
-                        lootList.add(i, data);
-                        itemExists = true;
+                if(lootList!=null&&!lootList.isEmpty()) {
+                    for (int i = 0; i < lootList.size(); i++) {
+                        if (lootList.get(i).equals(oldData)) {
+                            lootList.remove(i);
+                            lootList.add(i, data);
+                            itemExists = true;
+                        }
                     }
+                } else {
+                    lootList = new ArrayList<>();
                 }
-                if(!itemExists) {
+                if (!itemExists) {
                     lootList.add(data);
                 }
                 session.getBoss().setLootList(lootList);

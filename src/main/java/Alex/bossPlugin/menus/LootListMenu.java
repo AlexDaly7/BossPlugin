@@ -66,15 +66,17 @@ public class LootListMenu extends MultiPageMenu {
         items.clear();
 
         lootTable = session.getBoss().getLootList();
-        for(int i=0;i<lootTable.size();i++) {
-            if(lootTable.get(i).containsKey("item")) {
-                items.add(
-                    MenuUtil.createButton(
-                        (Material) lootTable.get(i).get("item"),
-                        Component.text(((Material) lootTable.get(i).get("item")).name()),
-                        List.of(Component.text("Click to open this items menu"))
-                    )
-                );
+        if(lootTable!=null&&!lootTable.isEmpty()) {
+            for (int i = 0; i < lootTable.size(); i++) {
+                if (lootTable.get(i).containsKey("item")) {
+                    items.add(
+                        MenuUtil.createButton(
+                            (Material) lootTable.get(i).get("item"),
+                            Component.text(((Material) lootTable.get(i).get("item")).name()),
+                            List.of(Component.text("Click to open this items menu"))
+                        )
+                    );
+                }
             }
         }
 
