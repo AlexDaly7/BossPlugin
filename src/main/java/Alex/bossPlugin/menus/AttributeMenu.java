@@ -1,16 +1,15 @@
 package Alex.bossPlugin.menus;
 
 import Alex.bossPlugin.util.MenuUtil;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
-import org.w3c.dom.Attr;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,7 +77,8 @@ public class AttributeMenu extends Menu {
             double parsedInput= Double.parseDouble(input);
             if(attributes==null||attributes.isEmpty()) attributes = new ArrayList<Map<String, Object>>();
             for (int i=0;i<attributes.size();i++) {
-                if (attributes.get(i).get("attribute").equals(attribute.toString())) {
+                player.sendMessage("FromArray: "+attributes.get(i).get("attribute")+"\nFrom attribuite: "+attribute.name());
+                if (((Attribute) attributes.get(i).get("attribute")).equals(attribute)) {
                     attributeExists = true;
                     attributes.get(i).remove("value");
                     attributes.get(i).put("value", parsedInput);
@@ -86,7 +86,7 @@ public class AttributeMenu extends Menu {
             }
             if(!attributeExists) {
                 attributes.add(Map.of(
-                        "attribute", attribute.toString(),
+                        "attribute", attribute.name(),
                         "value", parsedInput
                 ));
             }

@@ -151,7 +151,7 @@ public class BossSerializer {
         // Abilities have specific extra data per ability that must be stored.
         savedData.remove("ability");
         savedData.forEach((string, object) -> {
-           abilityMap.put(string, object);
+            if(!string.equals("attribute")) abilityMap.put(string, object);
         });
 
         return abilityMap;

@@ -14,6 +14,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -146,7 +147,7 @@ public class BossParser {
         try {
             // Get attribute object from string, catch if invalid.
             Attribute attribute = Attribute.valueOf(attributeData.get("attribute").toString());
-            return Map.of("attribute", attribute, "value", attributeData.get("value"));
+            return new HashMap<>(Map.of("attribute", attribute, "value", attributeData.get("value")));
         } catch(IllegalArgumentException e) {
             BossPlugin.getPlugin().getLogger().warning("Attribute "+attributeData.get("attribute")+" could not be found.");
             return null;
