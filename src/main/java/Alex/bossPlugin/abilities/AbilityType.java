@@ -38,6 +38,12 @@ public enum AbilityType {
         public Ability create(Map<String, Object> data) {
             return new Meteor(data);
         }
+    },
+    KNOCKBACK {
+        @Override
+        public Ability create(Map<String, Object> data) {
+            return new Knockback(data);
+        }
     };
 
     public abstract Ability create(Map<String, Object> data);
