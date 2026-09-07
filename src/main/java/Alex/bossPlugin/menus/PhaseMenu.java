@@ -54,7 +54,7 @@ public class PhaseMenu extends Menu {
             case 3 -> {
                 session.openMenu(new TransitionMenu(player, session));
             }
-            case 28 -> {
+            case 29 -> {
                 List<Phase> phases = session.getBoss().getPhases();
                 for(int i=0;i<phases.size();i++) {
                     if(phases.get(i).getMaxHealthRange()==session.getPhase().getMaxHealthRange()) {
@@ -167,7 +167,7 @@ public class PhaseMenu extends Menu {
                 List.of(Component.text("The current cooldown is "+session.getPhase().getMaxBaseCooldown()+"."))
             )
         );
-        menu.setItem(28,
+        menu.setItem(29,
             MenuUtil.createButton(
                 Material.TNT,
                 Component.text("Delete current phase"),
