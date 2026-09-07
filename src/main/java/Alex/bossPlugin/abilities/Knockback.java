@@ -18,11 +18,15 @@ public class Knockback extends Ability {
         name = "Knockback";
         lore = "Throws all players back from the boss";
         displayItem = Material.ENCHANTED_BOOK;
+
+        if(!data.containsKey("range")) {
+            data.put("range", 20);
+        }
     }
 
     @Override
     public void activate(Mob mob) {
-        int range = data.containsKey("range") ? (int) data.get("range") : 20;
+        int range = (int) data.get("range");
 
         List<Player> players = mob.getLocation().getNearbyPlayers(range).stream().toList();
 

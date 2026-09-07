@@ -19,12 +19,16 @@ public class Meteor extends Ability {
         name = "Meteor";
         lore = "Sends meteors from the sky at each player within range.";
         displayItem = Material.MAGMA_BLOCK;
+
+        if(!data.containsKey("range")) {
+            data.put("range", 30);
+        }
     }
 
     @Override
     public void activate(Mob mob) {
         Location loc = mob.getLocation();
-        int range = data.containsKey("range") ? (int) data.get("range") : 50;
+        int range = (int) data.get("range");
 
         if(!loc.getNearbyPlayers(range).isEmpty()) {
             for(Player player : loc.getNearbyPlayers(range)) {

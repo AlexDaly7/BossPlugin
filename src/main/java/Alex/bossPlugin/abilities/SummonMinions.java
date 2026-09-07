@@ -16,13 +16,20 @@ public class SummonMinions extends Ability {
         name = "Summon Minions";
         lore = "Summons mobs of the same type around the boss.";
         displayItem = Material.POTION;
+
+        if(!data.containsKey("range")) {
+            data.put("range", 10);
+        }
+
+        if(!data.containsKey("amount")) {
+            data.put("amount", 4);
+        }
     }
 
     @Override
     public void activate(Mob mob) {
-        // TODO: Custom particle inputs through config
-        int range = data.containsKey("range") ? (int) data.get("range") : 10;
-        int amount = data.containsKey("amount") ? (int) data.get("amount") : 4;
+        int range = (int) data.get("range");
+        int amount = (int) data.get("amount");
         Location loc = mob.getLocation();
         World world = mob.getWorld();
 

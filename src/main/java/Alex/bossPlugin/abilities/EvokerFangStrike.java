@@ -16,12 +16,16 @@ public class EvokerFangStrike extends Ability {
         name = "Evoker Fang Strike";
         lore = "A line of Evoker Fangs spring from the ground towards the nearest player.";
         displayItem = Material.TOTEM_OF_UNDYING;
+
+        if(!data.containsKey("range")) {
+            data.put("range", 50);
+        }
     }
 
     @Override
     public void activate(Mob mob) {
         Location loc = mob.getLocation();
-        int range = data.containsKey("range") ? (int) data.get("range") : 50;
+        int range = (int) data.get("range");
 
         if(!loc.getNearbyPlayers(range).isEmpty()) {
             ArrayList<Player> players = new ArrayList<Player>(loc.getNearbyPlayers(range));

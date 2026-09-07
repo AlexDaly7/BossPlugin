@@ -19,6 +19,10 @@ public class BlindNearby extends Ability {
         name = "Blind Nearby";
         lore = "Blinds nearby players momentarily.";
         displayItem = Material.POTION;
+
+        if(!data.containsKey("range")) {
+            data.put("range", 50);
+        }
     }
 
     @Override

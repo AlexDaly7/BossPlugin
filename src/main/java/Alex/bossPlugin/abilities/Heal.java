@@ -12,11 +12,15 @@ public class Heal extends Ability {
         name = "Heal";
         lore = "Heals the boss.";
         displayItem = Material.POTION;
+
+        if(!data.containsKey("amount")) {
+            data.put("amount", 10);
+        }
     }
 
     @Override
     public void activate(Mob mob) {
-        int amount = data.containsKey("amount") ? (int) data.get("amount") : 10;
+        int amount = (int) data.get("amount");
 
         mob.heal(amount);
     }

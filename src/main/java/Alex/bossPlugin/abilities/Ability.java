@@ -33,7 +33,12 @@ public class Ability {
         return displayItem;
     }
 
-    public Map<String, Object>  getData() {
+    public Map<String, Object> getData() {
         return new HashMap<>(data);
     }
+
+    public void setData(Map<String, Object> data) {
+        this.data = data;
+    }
+
 }

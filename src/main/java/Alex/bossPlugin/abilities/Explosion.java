@@ -16,11 +16,15 @@ public class Explosion extends Ability {
         name = "Explosion";
         lore = "Players locations start to flash and explode.";
         displayItem = Material.TNT;
+
+        if(!data.containsKey("range")) {
+            data.put("range", 50);
+        }
     }
 
     public void activate(Mob mob) {
         Location loc = mob.getLocation();
-        int range = data.containsKey("range") ? (int) data.get("range") : 50;
+        int range = (int) data.get("range");
 
         // Ensure players are nearby
         if(!loc.getNearbyPlayers(range).isEmpty()) {
