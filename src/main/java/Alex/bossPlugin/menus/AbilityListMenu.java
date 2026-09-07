@@ -22,18 +22,24 @@ public class AbilityListMenu extends MultiPageMenu {
     public void handleClick(int slot) {
         if(pageChangeClick(slot)) return;
         if(slot<45) {
-            if(slot+(currentPage*45)>session.getBoss().getPhases().size()-1) {
-                return;
+            if(isSpecial) {
+                if(slot+(currentPage*45)>session.getPhase().getSpecialAbilities().size()-1) {
+                    return;
+                }
+            } else {
+                if(slot+(currentPage*45)>session.getPhase().getSpecialAbilities().size()-1) {
+                    return;
+                }
             }
-            //AbilityMenu abilityMenu = new AbilityMenu(player, session);
-            //abilityMenu.setAbility(session.getBoss().getPhase(slot+(currentPage*45)));
-            //session.openMenu(abilityMenu);
+            session.openMenu(new AbilityMenu(player, session, abilities.get(slot+(currentPage*45)), isSpecial));
+
         } else if(slot==48) {
             AddAbilityMenu addAbilityMenu = new AddAbilityMenu(player, session);
             if(isSpecial) {
                 addAbilityMenu.setSpecialAbility();
             }
             session.openMenu(addAbilityMenu);
+
         } else if(slot==45) {
             session.openLastMenu();
         }
@@ -48,14 +54,15 @@ public class AbilityListMenu extends MultiPageMenu {
         }
 
         if(!abilities.isEmpty()) {
+            pages.clear();
             items.clear();
             abilities.forEach(ability -> {
                 items.add(
-                        MenuUtil.createButton(
-                                ability.getItem(),
-                                Component.text(ability.getName()),
-                                List.of(Component.text(ability.getLore()))
-                        )
+                    MenuUtil.createButton(
+                        ability.getItem(),
+                        Component.text(ability.getName()),
+                        List.of(Component.text(ability.getLore()))
+                    )
                 );
             });
         }
@@ -64,18 +71,18 @@ public class AbilityListMenu extends MultiPageMenu {
 
         pages.forEach(inventory -> {
             inventory.setItem(48,
-                    MenuUtil.createButton(
-                            Material.NETHER_STAR,
-                            Component.text("Add ability"),
-                            List.of(Component.text("Click to add an ability to this ability list"))
-                    )
+                MenuUtil.createButton(
+                    Material.NETHER_STAR,
+                    Component.text("Add ability"),
+                    List.of(Component.text("Click to add an ability to this ability list"))
+                )
             );
             inventory.setItem(45,
-                    MenuUtil.createButton(
-                            Material.CRYING_OBSIDIAN,
-                            Component.text("Go back to previous menu"),
-                            List.of(Component.text("Click to go back to the previous menu"))
-                    )
+                MenuUtil.createButton(
+                    Material.CRYING_OBSIDIAN,
+                    Component.text("Go back to previous menu"),
+                    List.of(Component.text("Click to go back to the previous menu"))
+                )
             );
         });
 

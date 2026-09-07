@@ -243,7 +243,7 @@ public class BossParser {
         AbilityType ability;
         try {
             ability = AbilityType.valueOf((String) abilityData.get("ability"));
-            return ability.create(abilityData);
+            return ability.create(new HashMap<>(abilityData));
         } catch(IllegalArgumentException e) {
             plugin.getLogger().info(abilityData.get("ability")+" is not a valid ability.");
             return null;

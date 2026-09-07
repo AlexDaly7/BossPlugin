@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class AddAbilityMenu extends MultiPageMenu {
 
         for(AbilityType ability : AbilityType.values()) {
             abilities.add(
-                    ability.create(Map.of())
+                    ability.create(new HashMap<>())
             );
         }
         for(Ability ability : abilities) {
